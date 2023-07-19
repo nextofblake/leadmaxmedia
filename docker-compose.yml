@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  webvue:
+    image: webvue:latest
+    build: .
+    ports:
+      - 80:80

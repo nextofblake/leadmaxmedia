@@ -1,0 +1,28 @@
+.typewriter {
+  font-family: monospace;
+  font-size: 1.2rem;
+  overflow: hidden;
+  border-right: 0.15em solid #666;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: blink 0.5s step-end infinite;
+}
+.typewriter--inked {
+  font-family: monospace;
+  font-size: 1.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+}
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #666;
+  }
+}

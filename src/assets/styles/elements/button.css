@@ -1,0 +1,37 @@
+/**
+* (Transparent Text) https://stackoverflow.com/questions/52319787/css-button-with-transparent-text
+*/
+button {
+  position: relative;
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid var(--color-gray-1);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 24px;
+  text-align: center;
+  transition: all 0.2s;
+  mix-blend-mode: screen;
+  color: var(--color-black);
+  background-color: var(--color-gray-1);
+}
+button::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0.3em;
+  content: '';
+  mix-blend-mode: color-burn;
+}
+button:hover {
+  background-color: transparent;
+  color: var(--color-gray-1);
+}
+
+.button--unblended {
+  mix-blend-mode: initial;
+}

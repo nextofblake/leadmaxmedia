@@ -1,0 +1,18 @@
+/* Base         - bootstrap css, contains all variables*/
+@import './base/reset.css';
+@import './base/variables.css';
+
+/* Behaviors    - css animations or modifications to divs */
+@import './behaviors/fade.css';
+@import './behaviors/spin.css';
+@import './behaviors/typewriter.css';
+
+/* Components    - vue 3 components */
+@import './components/view.css';
+
+/* Elements     - HTML elements, should only effect itself not children */
+@import './elements/a.css';
+@import './elements/body.css';
+@import './elements/button.css';
+@import './elements/header.css';
+@import './elements/video.css';
