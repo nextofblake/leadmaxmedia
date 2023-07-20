@@ -1,14 +1,12 @@
 <template>
   <div class="profile-grid" :style="{ height: height }">
     <!-- Row 1 -->
-    <div style="position: relative; overflow: hidden">
-      <img
-        v-if="profileService.loaded"
-        :src="profileService.src"
-        class="profile-img"
-        alt="Blake Alan"
-      />
-    </div>
+    <img
+      v-if="profileService.loaded"
+      :src="profileService.src"
+      class="profile-img"
+      alt="Blake Alan"
+    />
     <!-- Row 2 -->
     <div v-if="!inked" class="typewriter">
       <h2>{{ liveHeading }}</h2>

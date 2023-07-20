@@ -5,8 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "auth": "node ./scripts/auth.js"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
