@@ -1,6 +1,6 @@
 <template>
   <!-- View Stack -->
-  <div ref="viewProfile" class="view">
+  <div ref="viewProfile" class="view view--profile">
     <div style="height: 10vh;"></div>
     <ProfileContainer 
       height="40vh"
