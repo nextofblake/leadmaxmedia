@@ -1,12 +1,16 @@
 <template>
   <div class="profile-grid" :style="{ height: height }">
     <!-- Row 1 -->
-    <img
-      v-if="profileService.loaded"
-      :src="profileService.src"
-      class="profile-img"
-      alt="Blake Alan"
-    />
+    <div class="image-container" @click="profileService.flipImage">
+      <transition name="slide">
+        <div v-if="profileService.showFront" class="image-wrapper front">
+          <img :src="profileService.frontImage" alt="Front Image">
+        </div>
+        <div v-else class="image-wrapper back">
+          <img :src="profileService.backImage" alt="Back Image">
+        </div>
+      </transition>
+    </div>
     <!-- Row 2 -->
     <div v-if="!inked" class="typewriter">
       <h2>{{ liveHeading }}</h2>
@@ -136,6 +140,11 @@ export default {
       this.liveHeading = ''
     }
   },
+  computed: {
+    imageClass() {
+      return this.profileService.showFront ? '' : 'flip-image'
+    }
+  }
 }
 </script>
 
@@ -157,32 +166,40 @@ export default {
 .profile-img {
   height: calc(100% - 20px);
   display: inline-block;
-  border-radius: var(--radius-50);
   object-fit: cover;
+}
+/* Profile Image */
+.image-container {
+  position: relative;
   border: 10px double var(--color-gray-1);
+  border-radius: var(--radius-50);
+  overflow: hidden;
+  width: 300px; /* Set the desired width of the image container */
+  height: 300px; /* Set the desired height of the image container */
+  perspective: 800px; /* Set the perspective for the 3D effect */
 }
-.button--profile {
-  width: 175px;
+.image-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d; /* Ensure 3D transformations preserve child elements */
 }
-/* Mobile */
-/* @media screen and (max-width: 1000px) {
-  .card-layout {
-    grid-template-columns: auto;
-  }
-} */
-
-/* 
- * TODO move somewhere else 
- */
-.bullet-list {
-  list-style-type: disc;
-  margin: 0;
-  padding: 0;
-  padding-left: 40px;
-  font-size: 24px;
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the entire container */
 }
-.bullet-list li {
-  margin-bottom: 10px;
+.slide-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-leave-active {
+  transition: all 0.75s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0.75;
+  transform: translateX(-100%) skew(30deg);
 }
 
 /* Contact Form */
@@ -219,5 +236,8 @@ input:focus-visible,
 textarea:focus-visible {
   border: 2px solid var(--color-blue);
   outline: none;
+}
+.button--profile {
+  width: 175px;
 }
 </style>

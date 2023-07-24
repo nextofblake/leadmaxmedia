@@ -43,8 +43,15 @@ export default {
     }
   },
   mounted() {
-    this.fadeService.apply(this.$refs.viewInitial, 'slow')
-    this.heading = this.headingInitial
+    this.profileService.load()
+  },
+  watch: {
+    'profileService.loaded'(isLoaded) {
+      if (isLoaded) {
+        this.fadeService.apply(this.$refs.viewInitial, 'slow')
+        this.heading = this.headingInitial
+      }
+    }
   },
   methods: {
     onPrinted(heading) {
@@ -58,7 +65,7 @@ export default {
 
         case this.headingSuccessMsg:
         case this.headingFailureMsg:
-          this.showCta = false
+          this.profileService.flipImage()
           break         
       }
     },
@@ -75,6 +82,7 @@ export default {
         })
         .finally(() => {
           this.emailSending = false
+          this.showCta = false
         })
     },
   },
