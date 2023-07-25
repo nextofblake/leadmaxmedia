@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-grid" :style="{ height: height }">
+  <div class="profile-grid">
     <!-- Row 1 -->
     <div class="image-container" @click="profileService.flipImage">
       <transition name="slide">
@@ -55,11 +55,6 @@ import { interval, takeWhile } from 'rxjs'
 export default {
   name: 'ProfileContainer',
   props: {
-    height: {
-      type: String,
-      default: '100%',
-      required: true,
-    },
     loading: {
       type: Boolean,
       default: false,
@@ -155,10 +150,6 @@ export default {
 }
 .profile-grid {
   display: grid;
-  grid-template-rows:
-    calc(100% - var(--global-viewPadding) - var(--font-size-lg))
-    var(--font-size-lg)
-    min-content;
   justify-items: center;
   grid-gap: var(--global-viewPadding);
   padding: 0 5vw;
@@ -190,16 +181,15 @@ export default {
   height: 100%;
   object-fit: cover; /* Ensure the image covers the entire container */
 }
-.slide-enter-active {
-  transition: all 0.3s ease-out;
-}
+.slide-enter-active,
 .slide-leave-active {
-  transition: all 0.75s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.75s ease-in-out;
 }
-.slide-enter-from,
+.slide-enter-from {
+  transform: rotateY(180deg) scale(2);
+}
 .slide-leave-to {
-  opacity: 0.75;
-  transform: translateX(-100%) skew(30deg);
+  transform: rotateY(180deg);
 }
 
 /* Contact Form */

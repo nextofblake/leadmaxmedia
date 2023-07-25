@@ -50,3 +50,10 @@
   --radius-lg: 1rem;
   --radius-50: 50%;
 }
+
+/* Mobile width */
+@media(max-width: 400px) {
+  :root {
+    --font-size-lg: 18px;
+  }
+}
