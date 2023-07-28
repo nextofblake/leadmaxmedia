@@ -1,13 +1,13 @@
 <template>
   <div class="profile-grid">
     <!-- Row 1 -->
-    <div class="image-container" @click="profileService.flipImage">
-      <transition name="slide">
+    <div class="image-container" :class="{'shrink': shrink}" @click="profileService.spinImage()">
+      <transition name="flip">
         <div v-if="profileService.showFront" class="image-wrapper front">
           <img :src="profileService.frontImage" alt="Front Image">
         </div>
         <div v-else class="image-wrapper back">
-          <img :src="profileService.backImage" alt="Back Image">
+          <img :src="profileService.logoActive" alt="LxM Logo Active">
         </div>
       </transition>
     </div>
@@ -71,6 +71,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    shrink: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup() {
     return {
@@ -93,8 +97,9 @@ export default {
             this.$refs.welcomeButton.classList.add('fade--in')
           })
         } else {
+          this.ctaVisible = false
           this.$nextTick(() => {
-            this.fadeService.apply(this.$refs.contactForm, 'slow')
+            this.fadeService.apply(this.$refs.contactForm)
             this.fadeService.apply(this.$refs.welcomeButton, 'fast')
           })
         }
@@ -168,6 +173,12 @@ export default {
   width: 300px; /* Set the desired width of the image container */
   height: 300px; /* Set the desired height of the image container */
   perspective: 800px; /* Set the perspective for the 3D effect */
+  transition-property: width, height; /* Make shrink class avaliable */
+  transition-duration: 0.75s;
+}
+.image-container.shrink {
+  width: 200px;
+  height: 200px;
 }
 .image-wrapper {
   position: absolute;
@@ -179,17 +190,30 @@ export default {
 .image-wrapper img {
   width: 100%;
   height: 100%;
+  border-radius: 50%; /* Force images to be round for the flip animation*/
   object-fit: cover; /* Ensure the image covers the entire container */
 }
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.75s ease-in-out;
+
+/* <transition name="flip"> */
+.flip-enter-active,
+.flip-leave-active {
+  transition: all 0.75s linear;
 }
-.slide-enter-from {
-  transform: rotateY(180deg) scale(2);
+.flip-enter-from {
+  transform: rotateY(-180deg) scale(1.5);
 }
-.slide-leave-to {
+.flip-leave-to {
   transform: rotateY(180deg);
+}
+
+/* <transition name="fade"> */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.75s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Contact Form */

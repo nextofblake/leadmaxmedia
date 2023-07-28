@@ -6,6 +6,7 @@
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: 0.15em;
+  min-height: 20px; /* Ensure empty typewriter still takes up div space */
   animation: blink 0.5s step-end infinite;
 }
 .typewriter--inked {

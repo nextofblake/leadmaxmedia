@@ -35,6 +35,11 @@
     var(--color-gray-7) 44.98%,
     var(--color-gray-9) 121.15%
   );
+  --gradient-primary: linear-gradient(
+    135deg, 
+    var(--color-bluegreen) 0%, 
+    var(--color-blue) 74%
+  );
   --gradient-alt: linear-gradient(
     175.6deg,
     var(--color-orange) 44.98%,

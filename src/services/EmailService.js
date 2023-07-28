@@ -11,8 +11,8 @@ const EmailService = reactive({
       to_email: email,
     })
   },
-  sendFaker() {
-    return new Promise(resolve => setTimeout(resolve, 100000, {status: true}))
+  sendFaker(...args) {
+    return new Promise(resolve => setTimeout(resolve, 1, {status: true, args}))
   }
 })
 

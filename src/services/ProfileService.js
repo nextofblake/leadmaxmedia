@@ -1,10 +1,12 @@
 import { reactive } from 'vue'
 
 const ProfileService = reactive({
-  frontImage: 'blake_profile.png',
-  backImage: 'android-chrome-512x512.png',
+  frontImage: 'blake-profile.png',
+  logoActive: 'logo-active.png',
+  logoWhite: 'logo-white.png',
   loaded: false,
   showFront: true,
+  activeLogo: false,
   load() {
     // front image MUST load
     const image = new Image()
@@ -12,11 +14,15 @@ const ProfileService = reactive({
     image.src = this.frontImage
 
     // back image lazy load
-    const lazy = new Image()
-    lazy.src = this.backImage
+    const lazyActive = new Image()
+    lazyActive.src = this.logoActive
   },
   flipImage() {
     this.showFront = !this.showFront
+  },
+  spinImage() {
+    this.showFront = !this.showFront
+    setTimeout(() => this.showFront = !this.showFront, 750)
   }
 })
 

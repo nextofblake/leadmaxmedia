@@ -1,18 +1,16 @@
 .view {
-  background: var(--color-white);
   min-height: 100vh;
   width: 100vw;
   position: absolute;
-}
-.view--waterfall {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-start;
+  transition: background 0.75s ease;
 }
 .view--blue {
-  background-image: linear-gradient(135deg, var(--color-bluegreen) 0%, var(--color-blue) 74%);
+  background-image: var(--gradient-primary);
 }
-.view-white {
-  background-color: var(--color-white);
+.view--white {
+  background: var(--color-white)
+}
+.view--clear {
+  background: transparent; /* Animation works */
+  background-image: unset !important; /* No animation for background-image*/
 }
