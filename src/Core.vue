@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      devMode: true,
       emailSending: false,
       showCta: false,
       heading: '',
@@ -62,6 +63,12 @@ export default {
       if (isLoaded) {
         this.fadeService.apply(this.$refs.viewInitial, 'slow')
         this.heading = this.headingInitial
+        if (this.devMode) {
+          this.heading = this.headingSuccessMsg
+          this.emailSending = false
+          this.showCta = false
+          this.viewHome = true
+        }
       }
     }
   },
