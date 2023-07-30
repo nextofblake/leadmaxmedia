@@ -1,7 +1,7 @@
-<template>
-  <div class="profile-grid">
+<template>  
+  <div class="profile-grid" :class="{'shrink': shrink}">
     <!-- Row 1 -->
-    <div class="image-container" :class="{'shrink': shrink}" @click="profileService.spinImage()">
+    <div class="image-container" @click="profileService.spinImage()">
       <transition name="flip">
         <div v-if="profileService.showFront" class="image-wrapper front">
           <img :src="profileService.frontImage" alt="Front Image">
@@ -158,6 +158,12 @@ export default {
   justify-items: center;
   grid-gap: var(--global-viewPadding);
   padding: 0 5vw;
+  margin: 8vh 0;
+  transition-property: margin; /* Make shrink class avaliable */
+  transition-duration: 0.75s;
+}
+.profile-grid.shrink {
+  margin: 4vh 0; 
 }
 .profile-img {
   height: calc(100% - 20px);
@@ -176,9 +182,9 @@ export default {
   transition-property: width, height; /* Make shrink class avaliable */
   transition-duration: 0.75s;
 }
-.image-container.shrink {
-  width: 200px;
-  height: 200px;
+.profile-grid.shrink .image-container {
+  width: 100px;
+  height: 100px;
 }
 .image-wrapper {
   position: absolute;

@@ -1,6 +1,6 @@
 .typewriter {
   font-family: monospace;
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
   overflow: hidden;
   border-right: 0.15em solid #666;
   white-space: nowrap;
@@ -11,7 +11,7 @@
 }
 .typewriter--inked {
   font-family: monospace;
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
   overflow: hidden;
   white-space: nowrap;
   margin: 0 auto;

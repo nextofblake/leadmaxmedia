@@ -19,6 +19,12 @@ const ProfileService = reactive({
   },
   flipImage() {
     this.showFront = !this.showFront
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 750);
+    });
   },
   spinImage() {
     this.showFront = !this.showFront
