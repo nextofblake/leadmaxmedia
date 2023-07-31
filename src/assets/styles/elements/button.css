@@ -3,19 +3,21 @@
 */
 button {
   position: relative;
-  display: inline-block;
   padding: 0.35em 1.2em;
   border: 0.1em solid var(--color-gray-1);
   border-radius: var(--radius-sm);
   box-sizing: border-box;
   text-decoration: none;
   font-weight: 300;
-  font-size: 24px;
+  font-size: var(--font-size-lg);
   text-align: center;
   transition: all 0.2s;
   mix-blend-mode: screen;
   color: var(--color-black);
   background-color: var(--color-gray-1);
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 button::before {
   position: absolute;
@@ -34,4 +36,17 @@ button:hover {
 
 .button--unblended {
   mix-blend-mode: initial;
+}
+.button--blue {
+  border-color: var(--color-blue);
+  background-color: transparent;
+  color: var(--color-blue);
+}
+.button--blue:hover {
+  border-color: var(--color-gray-1);
+  background-color: transparent;
+  color: var(--color-gray-1); /* Update to desired color here */
+}
+.button--large {
+  font-size: 24px;
 }

@@ -36,7 +36,7 @@
       </div>
       <button
         ref="welcomeButton"
-        class="button--unblended button--profile fade--in"
+        class="button--unblended button--large button--profile fade--in"
         type="submit"
       >
         <span v-if="!loading">Discover</span>
@@ -157,13 +157,12 @@ export default {
   display: grid;
   justify-items: center;
   grid-gap: var(--global-viewPadding);
-  padding: 0 5vw;
-  margin: 8vh 0;
+  padding: 8vh 5vw;
   transition-property: margin; /* Make shrink class avaliable */
   transition-duration: 0.75s;
 }
 .profile-grid.shrink {
-  margin: 4vh 0; 
+  padding: 2vh 0; 
 }
 .profile-img {
   height: calc(100% - 20px);

@@ -41,9 +41,9 @@
     var(--color-blue) 74%
   );
   --gradient-alt: linear-gradient(
-    175.6deg,
-    var(--color-orange) 44.98%,
-    var(--color-orangelight) 121.15%
+    160deg,
+    var(--color-orange) 25%,
+    var(--color-orangelight) 100%
   );
 
   --device-mobile: 375px; /* Mobile width */
