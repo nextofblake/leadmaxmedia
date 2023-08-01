@@ -46,19 +46,24 @@
     var(--color-orangelight) 100%
   );
 
-  --device-mobile: 375px; /* Mobile width */
-  --device-tablet: 768px; /* Tablet width */
-  --desktop-width: 1024px; /* Desktop width */
-
   --radius-sm: 0.3rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-50: 50%;
+
+  --video-card-height: 200px; 
 }
 
 /* Mobile width */
 @media(max-width: 400px) {
   :root {
     --font-size-lg: 18px;
+  }
+}
+
+/* Mobile height */
+@media(max-height: 680px) {
+  :root {
+    --video-card-height: 135px;
   }
 }

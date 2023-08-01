@@ -3,6 +3,7 @@
 @import './base/variables.css';
 
 /* Behaviors    - css animations or modifications to divs */
+@import './behaviors/emphasized.css';
 @import './behaviors/fade.css';
 @import './behaviors/spin.css';
 @import './behaviors/typewriter.css';

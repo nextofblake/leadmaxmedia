@@ -1,0 +1,7 @@
+.emphasized {
+    color: var(--color-gray-8);
+    background: var(--gradient-alt);
+    -webkit-background-clip: text; /* For Safari */
+    background-clip: text;
+    color: transparent;
+}

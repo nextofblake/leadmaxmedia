@@ -1,65 +1,47 @@
 <template>
   <!-- View Stack -->
-  <div ref="viewHome" class="view view--blue"></div>
+  <div ref="showHome" class="view view--blue"></div>
   <div ref="viewProfile" class="view view--white">
     
     <ProfileContainer
-      :loading="emailSending"
       :showCta="showCta"
       :heading="heading"
-      :shrink="viewHome"
+      :shrink="showHome"
       @printed="onPrinted"
       @discover="onDiscover"
     />
 
     <transition name="rise">
-      <div v-if="viewHome" class="home-card">
-        <!-- Home Page -->
-        <div style="
-            background-image: var(--gradient-white); 
-            width: 90%; 
-            height: min-content; 
-            margin-top: 2vh; 
-            border-radius: var(--radius-md); 
-            box-shadow: 1px 1px 4px var(--color-gray-6);
-        ">
-          <div style="
-              position: relative;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              font-size: var(--font-size-xl);
-              font-family: var(--font-family-big);
-              border-bottom: 3px solid var(--color-gray-3);
-              border-radius: var(--radius-md) var(--radius-md) 0 0;
-              padding: 10px;
-              color: var(--color-gray-8);
-          ">
-            <span style="              
-              color: var(--color-gray-8);
-              background: var(--gradient-alt);
-              -webkit-background-clip: text; /* For Safari */
-              background-clip: text;
-              color: transparent;
-            ">Free Audit</span>
-          </div>
-          <div style="padding: 20px 0 0 0;">
-            <ul class="bullet-list">
-              <li>Web Analysis</li>
-              <li>Growth Strategies</li>
-              <li>Pricing & ROI</li>
-            </ul>
-          </div>
-          <div style="display: flex; justify-content: flex-end; margin: 10px">
-            <button class="button--unblended button--blue" style="width: 100px" @click="bookAudit()">
-              <span v-if="!auditLoading">Book</span>
-              <span v-if="auditLoading">
+      <div v-if="showHome" class="home-card">
+        <!-- HOME: meeting CTA -->
+        <VideoCard :src="videoService.intro" style="margin-top: 2vh">
+          <template #title>Book Meeting</template>
+          <template #footer>
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="button--unblended" style="width: 150px" @click="bookMeeting()">
+              <span v-if="true">Schedule</span>
+              <span v-if="false">
                 <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
               </span>
             </button>
           </div>
-        </div>
-
+          </template>
+        </VideoCard>
+        <!-- HOME: free audit -->
+        <VideoCard  :src="videoService.intro" style="margin-top: 2vh">
+          <template #title>Web Services</template>
+          <template #footer>
+            <div style="display: flex; justify-content: flex-end;">
+              <button class="button--unblended button--blue" style="width: 150px" @click="bookAudit()">
+                <span v-if="!loadingAuditBooking">Free Audit</span>
+                <span v-if="loadingAuditBooking">
+                  <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+                </span>
+              </button>
+            </div>
+          </template>
+        </VideoCard>
+        <!-- HOME: contact icons -->
         <div class="welcome-icons">
           <a href="https://www.instagram.com/nextofblake" target="_blank" rel="noopener noreferrer">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -69,7 +51,7 @@
               />
             </svg>
           </a>
-          <a href="tel:+18168986927">
+          <a href="sms:+18168986927">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
               <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
               <path
@@ -90,7 +72,7 @@
         <transition name="rise" @after-enter="playVideo()">
           <div v-if="showVideo" class="video-card">
             <!-- Intro Video -->
-            <video ref="video" controls @ended="onEndedVideo()">
+            <video ref="video" @ended="onEndedVideo()">
               <source :src="videoService.intro" type="video/mp4" />
             </video>
           </div>
@@ -105,55 +87,65 @@
 <script>
 import { inject } from 'vue'
 import ProfileContainer from './components/ProfileContainer.vue'
+import VideoCard from './components/VideoCard.vue'
 
 export default {
   name: 'Core',
   components: {
     ProfileContainer,
+    VideoCard,
   },
   setup() {
     return {
+      emailService: inject('emailService'),
       eventService: inject('eventService'),
       fadeService: inject('fadeService'),
       profileService: inject('profileService'),
-      emailService: inject('emailService'),
       videoService: inject('videoService'),
     }
   },
   data() {
     return {
-      devMode: false,
-      emailSending: false,
-      showCta: false,
       heading: '',
       headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
-      headingNextSteps: 'Our next move is...',
-      headingFailureMsg: 'Sorry, try again later',
+      headingAfterVideo: 'Okay, let\'s get connected',
       headingSuccessMsg: 'Thanks, check your inbox',
+      headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'I will reply in <48hr',
-      viewHome: false,
-      videoEnded: false,
+      loadingAuditBooking: false,
+      showCta: false,
+      showHome: false,
       showVideo: false,
-      auditLoading: false,
-      userName: '',
       userEmail: '',
+      userName: '',
     }
   },
   mounted() {
+    // Load profile assets
     this.profileService.load()
+    
+    // Load intro video
     this.videoService.load()
   },
   watch: {
     'profileService.loaded'(isLoaded) {
-      if (isLoaded) {
-        this.fadeService.apply(this.$refs.viewInitial, 'slow')
-        this.heading = this.headingIntro
-        if (this.devMode) {
-          this.heading = this.headingHomepage
-          this.emailSending = false
-          this.showCta = false
-          this.viewHome = true
+      if (!isLoaded) return
+
+      // Profile image loaded, begin showing viewProfile
+      // - ensures profile image always shown 
+      this.fadeService.apply(this.$refs.viewInitial, 'slow')
+      this.heading = this.headingIntro
+
+      // DEV MODE: ?dev=1
+      if (this.$route.query.dev) {
+        this.userName = 'LxM Mailinator'
+        this.userEmail = 'lxm@mailinator.com'
+        this.heading = this.headingHomepage
+        this.showCta = false
+        this.showHome = true
+        window.devService = {
+          play: () => this.$refs.video.play()
         }
       }
     }
@@ -167,8 +159,8 @@ export default {
 
         case this.headingHomepage:
           this.profileService.flipImage().then(() => {
-            // only show video when live
-            this.showVideo = this.devMode ? false : true
+            // show video if route = /intro
+            this.showVideo = this.$route.path === '/intro'
           })
           break
         case this.headingSuccessMsg:
@@ -178,6 +170,8 @@ export default {
           break
         case this.headingFailureMsg:
           this.profileService.flipImage()
+          this.showCta = false
+          this.showHome = false
           break
       }
     },
@@ -186,19 +180,22 @@ export default {
       this.userEmail = email
       this.heading = this.headingHomepage
       this.showCta = false
-      this.viewHome = true
+      this.showHome = true
     },
     playVideo() {
       this.$refs.video.play()
       this.$refs.video.currentTime = 0
-      this.$refs.video.muted = false
+      this.$refs.video.muted = true // default to muted for now
     },
     onEndedVideo() {
       this.showVideo = false
-      this.heading = this.headingNextSteps
+      this.heading = this.headingAfterVideo
+    },
+    bookMeeting() {
+
     },
     bookAudit() {
-      this.auditLoading = true
+      this.loadingAuditBooking = true
       this.emailService.sendSales(this.userName, this.userEmail)
         .then(response => {
           this.heading = this.headingSuccessMsg
@@ -209,8 +206,8 @@ export default {
           console.error('Core@onDiscover', error)
         })
         .finally(() => {
-          this.auditLoading = false
-          this.viewHome = false
+          this.loadingAuditBooking = false
+          this.showHome = false
         })
     }
   },
@@ -240,6 +237,10 @@ export default {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  align-content: flex-start;
+}
+.home-card > * {
+  margin: 0 20px 0 20px;
 }
 .video-card {
   display: flex; 
