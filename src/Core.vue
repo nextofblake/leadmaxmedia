@@ -74,7 +74,7 @@
         <transition name="rise" @after-enter="playVideo()">
           <div v-if="showVideo" class="video-card">
             <!-- Intro Video -->
-            <video ref="video" @ended="onEndedVideo()">
+            <video ref="video" :controls="false" @ended="onEndedVideo()">
               <source :src="videoService.intro" type="video/mp4" />
             </video>
             <!-- Intro Controls -->

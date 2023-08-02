@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 
 const VideoService = reactive({
-  intro: 'intro.mp4',
+  intro: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/intro.mp4',
   services: 'services.mp4',
   meeting: 'meeting.mp4',
   loaded: false,
@@ -12,6 +12,17 @@ const VideoService = reactive({
     image.onload = () => (this.loaded = true)
     image.src = this.intro
   },
+  exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
 })
 
 export default VideoService

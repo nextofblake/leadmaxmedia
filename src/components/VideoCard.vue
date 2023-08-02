@@ -6,7 +6,16 @@
 <template>
     <div ref="self" class="card">
       <div class="card-head">
-        <video ref="video" @ended="onEndedVideo" @click.prevent="toggleVideo">
+        <video 
+          ref="video"
+          :controls="false"
+          :disablepictureinpicture="true"
+          :playsinline="true"
+          @click.prevent="toggleVideo"
+          @timeupdate="setControlWidth"
+          @ended="onEndedVideo"
+          @fullscreenchange="onFullscreenChange"
+        >
           <source :src="src" type="video/mp4" />
         </video>
         <div class="card-head--controls" :style="{ width: controlWidth }"></div>
@@ -57,13 +66,11 @@
       return {
         playing: false,
         controlWidth: '0%',
-        controlTransitionDuration: '0.5s',
         showIcon: false,
       }
     },
     mounted() {
       document.addEventListener('click', this.onClickAwayVideo)
-      setInterval(this.setControlWidth, 500)
     },
     watch: {
       bounceIcon: {
@@ -87,7 +94,6 @@
         this.$refs.video.muted = true // WARNING: temporary muted fix for live production
   
         this.playing = true
-        this.controlTransitionDuration = '0'
         this.$refs.self.classList.add('card--hovering')
       },
       stopVideo() {
@@ -108,8 +114,23 @@
           this.stopVideo()
         }
       },
+      onFullscreenChange() {
+        if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+          // Exit fullscreen if the video enters fullscreen mode
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        }
+      },
       setControlWidth() {
         const currentTime = this.$refs.video.currentTime
+        console.log(this.$refs.video.currentTime)
         const duration = this.$refs.video.duration
         const percentage = Math.round((currentTime / duration) * 100)
   
@@ -187,7 +208,7 @@
 
   /* video play percent*/
   width: 0%;
-  transition: width 0.5s linear;
+  transition: width 0.25s linear;
 }
 .card--hovering .card-head--controls {
   background: var(--gradient-alt);
