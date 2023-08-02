@@ -2,6 +2,8 @@ import { reactive } from 'vue'
 
 const VideoService = reactive({
   intro: 'intro.mp4',
+  services: 'services.mp4',
+  meeting: 'meeting.mp4',
   loaded: false,
   load() {
     console.log('VideoService@load')

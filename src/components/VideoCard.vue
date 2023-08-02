@@ -6,22 +6,30 @@
 <template>
     <div ref="self" class="card">
       <div class="card-head">
-        <video ref="video" controls @ended="onEndedVideo">
+        <video ref="video" @ended="onEndedVideo" @click.prevent="toggleVideo">
           <source :src="src" type="video/mp4" />
         </video>
         <div class="card-head--controls" :style="{ width: controlWidth }"></div>
-        <div class="card-head--overlay" @click.prevent="toggleVideo">
-          <slot name="title"></slot>
-          <svg
-            v-show="false"
-            class="card-head--overlay-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
-            <path
-              d="M256 504c137 0 248-111 248-248S393 8 256 8 8 119 8 256s111 248 248 248zM40 256c0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216 0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216zm331.7-18l-176-107c-15.8-8.8-35.7 2.5-35.7 21v208c0 18.4 19.8 29.8 35.7 21l176-101c16.4-9.1 16.4-32.8 0-42zM192 335.8V176.9c0-4.7 5.1-7.6 9.1-5.1l134.5 81.7c3.9 2.4 3.8 8.1-.1 10.3L201 341c-4 2.3-9-.6-9-5.2z"
-            ></path>
-          </svg>
+        <div class="card-head--overlay" :class="{ 'card-head--overlay-playing': playing }" @click.prevent="toggleVideo">
+          <span class="card-head--overlay-title"><slot name="title"></slot></span>
+          <div class="card-head--overlay-icon-wrapper">
+            <!-- 
+              Property "bounce" was accessed during render but is not defined on instance.
+              It's because @enter="bounce" is keyframe not a method/data on component
+            -->
+            <transition @enter="bounce" appear>
+              <svg 
+                v-show="showIcon" 
+                class="card-head--overlay-icon" 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 384 512"
+              >
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path style="fill: var(--color-gray-3)" d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"/>
+              </svg>
+            </transition>
+          </div>
+          <div></div>
         </div>
       </div>
       <div class="card-footer">
@@ -31,6 +39,7 @@
   </template>
   
   <script>
+
   export default {
     name: 'VideoCard',
     props: {
@@ -38,17 +47,31 @@
         type: String,
         required: true,
       },
+      bounceIcon: {
+        type: Number,
+        required: false,
+        default: 0
+      }
     },
     data() {
       return {
         playing: false,
         controlWidth: '0%',
         controlTransitionDuration: '0.5s',
+        showIcon: false,
       }
     },
     mounted() {
       document.addEventListener('click', this.onClickAwayVideo)
       setInterval(this.setControlWidth, 500)
+    },
+    watch: {
+      bounceIcon: {
+        handler() {
+          this.showIcon = true
+          setTimeout(() => this.showIcon = false, 500)
+        }
+      }
     },
     methods: {
       toggleVideo() {
@@ -61,7 +84,7 @@
       startVideo() {
         this.$refs.video.play()
         this.$refs.video.currentTime = 0
-        this.$refs.video.muted = true // WARNING: temporary fix for live production
+        this.$refs.video.muted = true // WARNING: temporary muted fix for live production
   
         this.playing = true
         this.controlTransitionDuration = '0'
@@ -74,9 +97,8 @@
         this.$refs.self.classList.remove('card--hovering')
       },
       onEndedVideo() {
-        this.stopVideo()
         this.$refs.video.currentTime = 0
-        this.$refs.video.play()
+        this.stopVideo()
       },
       onClickAwayVideo(event) {
         window.lastVid = this.$refs.self
@@ -96,98 +118,131 @@
     },
   }
   </script>
-  
-  <style scoped>
-  .card {
-    background-image: var(--gradient-white);
-    border-radius: var(--radius-md);
-    width: 100%;
-    /* box-shadow: 1px 2px 6px rgba(164, 175, 189, 0.32); @todo - not included for this background*/
-    transition: transform 1s ease; /* Hover effect */
+
+<style scoped>
+.card {
+  background-image: var(--gradient-white);
+  border-radius: var(--radius-md);
+  width: 100%;
+  /* box-shadow: 1px 2px 6px rgba(164, 175, 189, 0.32); @todo - not included for this background*/
+  transition: transform 1s ease; /* Hover effect */
+}
+.card--hovering {
+  transform: scale(1.05);
+}
+.card-shadow {
+  box-shadow: 3px 3px 5px var(--color-gray-6);
+}
+.card.transparent {
+  background: transparent;
+  border: 1px solid var(--color-gray-2);
+}
+.card-head {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2.5rem;
+  font-family: var(--font-family-big);
+  color: var(--color-gray-7);
+  border-bottom: 3px solid var(--color-gray-3);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.card-head + .card-body {
+  padding-top: 10px;
+}
+.card-body {
+  padding: 20px;
+}
+.card-footer {
+  padding: 6px 10px;
+}
+
+/* 
+  * Video Cards 
+  * - needed to apply styling directly to the video slot
+  */
+.card--hovering .card-head--overlay {
+  background: none;
+}
+.card-body--title {
+  font-size: 2.5rem;
+  font-family: var(--font-family-big);
+  color: var(--color-gray-7);
+}
+.card-head > * {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.card-head video {
+  height: var(--video-card-height); /* WARNING: randomly set to work for iPhone SE */
+  object-fit: cover;
+  width: 100%;
+}
+.card-head--controls {
+  position: absolute;
+  bottom: -3px;
+  height: 3px;
+  background-image: none;
+  border-radius: 3px;
+
+  /* video play percent*/
+  width: 0%;
+  transition: width 0.5s linear;
+}
+.card--hovering .card-head--controls {
+  background: var(--gradient-alt);
+}
+.card-head--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-gray-2);
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+.card-head--overlay-playing {
+  display: none;
+}
+.card-head--overlay-title {
+  margin-top: 10px;
+}
+.card-head--overlay-icon-wrapper {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-head--overlay-icon {
+  height: 40px;
+  animation: bounce 1.5s
+}
+.card-head--overlay-icon path {
+  fill: var(--color-gray-9);
+}
+
+/* <transition name="bounce"> */
+@keyframes bounce {
+  0%, 10%, 50%, 90%, 100% {
+    transform: translateY(10px);
   }
-  .card--hovering {
-    transform: scale(1.05);
+  20% {
+    transform: translateY(-10px);
   }
-  .card-shadow {
-    box-shadow: 3px 3px 5px var(--color-gray-6);
+  40% {
+    transform: translateY(0);
   }
-  .card.transparent {
-    background: transparent;
-    border: 1px solid var(--color-gray-2);
+  60% {
+    transform: translateY(-10px);
   }
-  .card-head {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 2.5rem;
-    font-family: var(--font-family-big);
-    color: var(--color-gray-7);
-    border-bottom: 3px solid var(--color-gray-3);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  80% {
+    transform: translateY(0);
   }
-  .card-head + .card-body {
-    padding-top: 10px;
-  }
-  .card-body {
-    padding: 20px;
-  }
-  .card-footer {
-    padding: 6px 10px;
-  }
-  
-  /* 
-   * Video Cards 
-   * - needed to apply styling directly to the video slot
-   */
-  .card--hovering .card-head--overlay {
-    background: none;
-  }
-  .card-body--title {
-    font-size: 2.5rem;
-    font-family: var(--font-family-big);
-    color: var(--color-gray-7);
-  }
-  .card-head > * {
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-  }
-  .card-head video {
-    height: var(--video-card-height); /* WARNING: randomly set to work for iPhone SE */
-    object-fit: cover;
-    width: 100%;
-  }
-  .card-head--controls {
-    position: absolute;
-    bottom: -3px;
-    height: 3px;
-    background-image: none;
-  
-    /* video play percent*/
-    width: 0%;
-    transition: width 0.5s linear;
-  }
-  .card--hovering .card-head--controls {
-    background: var(--gradient-alt);
-  }
-  .card-head--overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--color-gray-3);
-  
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-  }
-  .card-head--overlay-icon {
-    height: 10vh;
-  }
-  .card-head--overlay-icon path {
-    fill: var(--color-gray-9);
-  }
-  </style>
+}
+</style>
   

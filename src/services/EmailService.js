@@ -11,6 +11,13 @@ const EmailService = reactive({
       to_email: email,
     })
   },
+  sendMeeting(name, email) {
+    return emailjs.send('service_lxm', 'template_nk33u8g', {
+      from_name: 'Blake Alan',
+      to_name: name,
+      to_email: email,
+    })
+  },
   sendFaker(...args) {
     return new Promise(resolve => setTimeout(resolve, 1, {status: true, args}))
   }
