@@ -125,7 +125,7 @@ export default {
       heading: '',
       headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
-      headingAfterVideo: 'Alright, let\'s connect',
+      headingAfterVideo: 'Let\'s connect',
       headingSuccessMsg: 'Thanks, check your inbox',
       headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'I will reply in <48hr',

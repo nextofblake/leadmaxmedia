@@ -2,4 +2,10 @@ body {
   background: var(--color-white);
   font-family: var(--font-family-default);
   font-size: var(--font-size-md);
+  /**
+   * When a vertical scrollbar is present on .view
+   * the width of the scrollbar adds .view 100vw
+   * causing annoying horizontal scrollbar
+   */
+  overflow-x: hidden;
 }
