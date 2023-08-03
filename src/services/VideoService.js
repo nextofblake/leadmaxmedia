@@ -7,9 +7,9 @@ const VideoService = reactive({
   loaded: false,
   load() {
     console.log('VideoService@load')
-    const intro = new Image()
-    intro.onload = () => (this.loaded = true)
-    intro.src = this.intro
+    // const intro = new Image()
+    // intro.onload = () => (this.loaded = true)
+    // intro.src = this.intro
 
     const checkup = new Image()
     checkup.onload = () => (this.loaded = true)
