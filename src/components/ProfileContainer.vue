@@ -19,32 +19,37 @@
       <h2>{{ heading }}</h2>
     </div>
     <!-- Row 3 -->
-    <form class="contact-form fade--in" ref="contactForm" v-if="ctaVisible" @submit.prevent="submit">
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name" placeholder="Your Name (e.g. John Doe)" required />
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          placeholder="Your Email (e.g. john.doe@email.com)"
-          required
-        />
-      </div>
-      <button
-        ref="welcomeButton"
-        class="button--unblended button--large button--profile fade--in"
-        type="submit"
-      >
-        <span v-if="!loading">Discover</span>
-        <span v-if="loading">
-          <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-        </span>
-      </button>
-    </form>
+    <transition name="fade" v-if="ctaVisible">
+      <form v-if="showContactForm" class="contact-form" ref="contactForm" @submit.prevent="submit">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" v-model="name" placeholder="Your Name (e.g. John Doe)" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            placeholder="Your Email (e.g. john.doe@email.com)"
+            required
+          />
+        </div>
+        <transition name="fade">
+          <button
+            v-if="showWelcomeButton"
+            ref="welcomeButton"
+            class="button--unblended button--large button--profile"
+            type="submit"
+          >
+            <span v-if="!loading">Discover</span>
+            <span v-if="loading">
+              <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+            </span>
+          </button>
+        </transition>
+      </form>
+    </transition>
   </div>
 </template>
 
@@ -79,8 +84,20 @@ export default {
   setup() {
     return {
       profileService: inject('profileService'),
-      fadeService: inject('fadeService'),
     }
+  },
+  data() {
+    return {
+      showWelcomeButton: false,
+      showContactForm: false,
+      ctaVisible: true,
+      liveHeading: '',
+      name: '',
+      email: '',
+    }
+  },
+  mounted() {
+    this.profileService.load()
   },
   watch: {
     heading: {
@@ -92,30 +109,15 @@ export default {
     showCta: {
       handler(show) {
         if (show) {
-          this.ctaVisible = true
-          this.$nextTick(() => {
-            this.$refs.welcomeButton.classList.add('fade--in')
-          })
+          this.showContactForm = true
+          setTimeout(() => {
+            this.showWelcomeButton = true
+          }, 250)
         } else {
           this.ctaVisible = false
-          this.$nextTick(() => {
-            this.fadeService.apply(this.$refs.contactForm)
-            this.fadeService.apply(this.$refs.welcomeButton, 'fast')
-          })
         }
       },
     }
-  },
-  data() {
-    return {
-      ctaVisible: false,
-      liveHeading: '',
-      name: '',
-      email: '',
-    }
-  },
-  mounted() {
-    this.profileService.load()
   },
   methods: {
     submit() {
@@ -209,16 +211,6 @@ export default {
 }
 .flip-leave-to {
   transform: rotateY(180deg);
-}
-
-/* <transition name="fade"> */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.75s ease-in-out;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 /* Contact Form */

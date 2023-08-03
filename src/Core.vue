@@ -1,170 +1,121 @@
 <template>
-  <!-- View Stack -->
-  <div ref="showHome" class="view view--blue"></div>
-  <div ref="viewProfile" class="view view--white">
-    
-    <ProfileContainer
-      :showCta="showCta"
-      :heading="heading"
-      :shrink="showHome"
-      @printed="onPrinted"
-      @discover="onDiscover"
-    />
+  <transition name="fade" @enter="onAppLoaded">
+    <!-- Overlay view masking app when assets are loading -->
+    <div v-if="!profileService.loaded" class="view view--white"></div>
 
-    <transition name="rise">
-      <div v-if="showHome" class="home-card">
-        <Break height="2vh"/>
-        <!-- HOME: free audit -->
-        <VideoCard  :src="videoService.intro" :bounceIcon="videoCardBounce" style="max-width: 500px;">
-          <template #footer>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>Brand Checkup</span>
-              <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
-                <span v-if="!loadingSalesEmail">Free</span>
-                <span v-if="loadingSalesEmail">
-                  <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-                </span>
-              </button>
-            </div>
-          </template>
-        </VideoCard>
-        <Break height="2vh"/>
-        <!-- HOME: free audit -->
-        <VideoCard  :src="videoService.intro" style="max-width: 500px;">
-          <template #footer>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>15 Minute Chat</span>
-              <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
-                <span v-if="!loadingMeetingEmail">Book</span>
-                <span v-if="loadingMeetingEmail">
-                  <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-                </span>
-              </button>
-            </div>
-          </template>
-        </VideoCard>
-        <Break height="2vh"/>
-        <div style="width: 100%; max-width: 500px;">
-          <h1 style="color: var(--color-gray-0)">Portfolio</h1>
-          <Break/>
-          <div class="portfolio-card">
-            <div><span class="company-name">TLG</span> - <span class="description">A lead generation company in fintech</span></div>
-            <a class="portfolio-link" href="https://financebuddy.com" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path style="fill: var(--color-darkblue)" d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/>
-              </svg>
-            </a>
-          </div>
-          <div class="portfolio-card">
-            <div><span class="company-name">Nukshuk</span> - <span class="description">A habit tracking app</span></div>
-            <a class="portfolio-link" href="https://coach.nukshuk.com" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path style="fill: var(--color-darkblue)" d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/>
-              </svg>
-            </a>
-          </div>
-          <div class="portfolio-card">
-            <div><span class="company-name">Snapfi</span> - <span class="description">Mortgage lead application</span></div>
-            <a class="portfolio-link" href="https://snapfi.com" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path style="fill: var(--color-darkblue)" d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/>
-              </svg>
-            </a>
-          </div>
-          <div class="portfolio-card">
-            <div><span class="company-name">Hunting Locator</span> - <span class="description">Hunting utility app</span></div>
-            <a class="portfolio-link" href="https://huntinglocator.com" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path style="fill: var(--color-darkblue)" d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/>
-              </svg>
-            </a>
-          </div>
-          <div class="portfolio-card">
-            <div><span class="company-name">Resume</span> - <span class="description">Career Achievements</span></div>
-            <a class="portfolio-link" href="https://afill.com" target="_blank">
-              <svg style="position: relative; left: 1px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path style="fill: var(--color-darkblue)" d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/>
-              </svg>
-            </a>
+    <!-- Core view -->
+    <div v-else class="view view--white">
+      
+      <!-- Profile Header -->
+      <ProfileContainer
+        :showCta="showProfileCta"
+        :heading="heading"
+        :shrink="showHome"
+        @printed="onPrinted"
+        @discover="onDiscover"
+      />
+
+      <!-- Home Page -->
+      <transition name="rise">
+        <div v-if="showHome" class="home-page">
+          <Break height="2vh"/>
+          <VideoCard  :src="videoService.intro" :bounceIcon="videoCardBounce" style="max-width: 500px;">
+            <template #footer>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Brand Checkup</span>
+                <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
+                  <span v-if="!loadingSalesEmail">Free</span>
+                  <span v-if="loadingSalesEmail">
+                    <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+                  </span>
+                </button>
+              </div>
+            </template>
+          </VideoCard>
+          <Break height="2vh"/>
+          <VideoCard  :src="videoService.intro" style="max-width: 500px;">
+            <template #footer>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>15 Minute Chat</span>
+                <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
+                  <span v-if="!loadingMeetingEmail">Book</span>
+                  <span v-if="loadingMeetingEmail">
+                    <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+                  </span>
+                </button>
+              </div>
+            </template>
+          </VideoCard>
+          <Break height="2vh"/>
+          <div style="width: 100%; max-width: 500px;">
+            <h1 style="color: var(--color-gray-0)">Portfolio</h1>
+            <Break/>
+            <PortfolioCard 
+              name="TLG"
+              description="A lead generation company in fintech"
+              link="https://financebuddy.com"
+              iconName="paperclip"
+            />
+            <PortfolioCard 
+              name="Nukshuk"
+              description="A habit tracking app"
+              link="https://coach.nukshuk.com"
+              iconName="paperclip"
+            />
+            <PortfolioCard 
+              name="Snapfi"
+              description="Mortgage lead application"
+              link="https://snapfi.com"
+              iconName="paperclip"
+            />
+            <PortfolioCard 
+              name="Hunting Locator"
+              description="Hunting utility app"
+              link="https://huntinglocator.com"
+              iconName="paperclip"
+            />
+            <PortfolioCard 
+              name="Resume"
+              description="Career Achievements"
+              iconName="download"
+            />
           </div>
           <Break height="2vh"/>
-          <div class="contact-icons-stub">
-            <!-- Ensure fixed icon height factored into scroll -->
-          </div>
+          <ContactsFooter/>
         </div>
+      </transition>
 
-        <transition name="rise" @after-enter="playVideo()">
-          <div v-if="showVideo" class="video-card">
-            <!-- Intro Video -->
-            <video 
-              ref="video"
-              :controls="false"
-              :disablepictureinpicture="true"
-              :playsinline="true"
-              @timeupdate="setControlWidth"
-              @ended="onEndedVideo"
-            >
-              <source :src="videoService.intro" type="video/mp4" />
-            </video>
-            <!-- Intro Controls -->
-            <div class="video-card--controls" :style="{ width: videoCardControlWidth }"></div>
-          </div>
-        </transition>
-      </div>
-    </transition>
-
-    <transition name="rise">
-      <!-- HOME: contact icons -->
-      <div v-if="showHome" class="contact-icons">
-        <a href="https://www.instagram.com/nextofblake" target="_blank" rel="noopener noreferrer">
-          <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path
-              style="fill: var(--color-darkblue)"
-              d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
-            />
-          </svg>
-        </a>
-        <a href="sms:+18168986927">
-          <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-            <path
-              style="fill: var(--color-darkblue)"
-              d="M88.2 309.1c9.8-18.3 6.8-40.8-7.5-55.8C59.4 230.9 48 204 48 176c0-63.5 63.8-128 160-128s160 64.5 160 128s-63.8 128-160 128c-13.1 0-25.8-1.3-37.8-3.6c-10.4-2-21.2-.6-30.7 4.2c-4.1 2.1-8.3 4.1-12.6 6c-16 7.2-32.9 13.5-49.9 18c2.8-4.6 5.4-9.1 7.9-13.6c1.1-1.9 2.2-3.9 3.2-5.9zM0 176c0 41.8 17.2 80.1 45.9 110.3c-.9 1.7-1.9 3.5-2.8 5.1c-10.3 18.4-22.3 36.5-36.6 52.1c-6.6 7-8.3 17.2-4.6 25.9C5.8 378.3 14.4 384 24 384c43 0 86.5-13.3 122.7-29.7c4.8-2.2 9.6-4.5 14.2-6.8c15.1 3 30.9 4.5 47.1 4.5c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176zM432 480c16.2 0 31.9-1.6 47.1-4.5c4.6 2.3 9.4 4.6 14.2 6.8C529.5 498.7 573 512 616 512c9.6 0 18.2-5.7 22-14.5c3.8-8.8 2-19-4.6-25.9c-14.2-15.6-26.2-33.7-36.6-52.1c-.9-1.7-1.9-3.4-2.8-5.1C622.8 384.1 640 345.8 640 304c0-94.4-87.9-171.5-198.2-175.8c4.1 15.2 6.2 31.2 6.2 47.8l0 .6c87.2 6.7 144 67.5 144 127.4c0 28-11.4 54.9-32.7 77.2c-14.3 15-17.3 37.6-7.5 55.8c1.1 2 2.2 4 3.2 5.9c2.5 4.5 5.2 9 7.9 13.6c-17-4.5-33.9-10.7-49.9-18c-4.3-1.9-8.5-3.9-12.6-6c-9.5-4.8-20.3-6.2-30.7-4.2c-12.1 2.4-24.7 3.6-37.8 3.6c-61.7 0-110-26.5-136.8-62.3c-16 5.4-32.8 9.4-50 11.8C279 439.8 350 480 432 480z"
-            />
-          </svg>
-        </a>
-        <a href="mailto:blake@leadmaxmedia.com">
-          <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path
-              style="fill: var(--color-darkblue)"
-              d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"
-            />
-          </svg>
-        </a>
-      </div>
-    </transition>
-
-  </div>
-  <div ref="viewInitial" class="view view--white"></div>
+      <!-- Video Reels -->
+      <transition name="rise">
+        <VideoReel v-if="showIntroReel" @ended="onIntroReelEnd"/>
+      </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
 import { inject } from 'vue'
+import Break from './components/Break.vue'
+import ContactsFooter from './components/ContactsFooter.vue'
+import PortfolioCard from './components/PortfolioCard.vue'
 import ProfileContainer from './components/ProfileContainer.vue'
 import VideoCard from './components/VideoCard.vue'
-import Break from './components/Break.vue'
+import VideoReel from './components/VideoReel.vue'
 
 export default {
   name: 'Core',
   components: {
+    Break,
+    ContactsFooter,
+    PortfolioCard,
     ProfileContainer,
     VideoCard,
-    Break,
+    VideoReel,
   },
   setup() {
     return {
       emailService: inject('emailService'),
       eventService: inject('eventService'),
-      fadeService: inject('fadeService'),
       profileService: inject('profileService'),
       videoService: inject('videoService'),
     }
@@ -180,29 +131,22 @@ export default {
       headingFinalMsg: 'I will reply in <48hr',
       loadingMeetingEmail: false,
       loadingSalesEmail: false,
-      showCta: false,
+      showProfileCta: false,
       showHome: false,
-      showVideo: false,
+      showIntroReel: false,
       userEmail: '',
       userName: '',
       videoCardBounce: 0,
-      videoCardControlWidth: '0%',
     }
   },
   mounted() {
-    // Load profile assets
+    // Load assets
     this.profileService.load()
-    
-    // Load intro video
     this.videoService.load()
   },
-  watch: {
-    'profileService.loaded'(isLoaded) {
-      if (!isLoaded) return
-
-      // Profile image loaded, begin showing viewProfile
-      // - ensures profile image always shown 
-      this.fadeService.apply(this.$refs.viewInitial, 'slow')
+  methods: {
+    onAppLoaded() {
+      console.log('Core@onAppLoaded')
       this.heading = this.headingIntro
 
       // DEV MODE: ?dev=1
@@ -210,30 +154,25 @@ export default {
         this.userName = 'LxM Mailinator'
         this.userEmail = 'lxm@mailinator.com'
         this.heading = this.headingHomepage
-        this.showCta = false
+        this.showProfileCta = false
         this.showHome = true
-        window.devService = {
-          play: () => this.$refs.video.play()
-        }
       }
-    }
-  },
-  methods: {
+    },
     onPrinted(heading) {
       switch (heading) {
         case this.headingIntro:
-          this.showCta = true
+          this.showProfileCta = true
           break
 
         case this.headingHomepage:
           // show video if route = /intro
-          this.showVideo = this.$route.path === '/intro'
+          this.showIntroReel = this.$route.path === '/intro'
           this.profileService.flipImage().then(() => {
-            if (!this.showVideo) setTimeout(() => this.videoCardBounce++, 500)
+            if (!this.showIntroReel) setTimeout(() => this.videoCardBounce++, 1000)
           })
           break
         case this.headingAfterVideo:
-          setTimeout(() => this.videoCardBounce++, 500)
+          setTimeout(() => this.videoCardBounce++, 1000)
           break
         case this.headingSuccessMsg:
           this.profileService.flipImage().then(() => {
@@ -242,7 +181,7 @@ export default {
           break
         case this.headingFailureMsg:
           this.profileService.flipImage()
-          this.showCta = false
+          this.showProfileCta = false
           this.showHome = false
           break
       }
@@ -251,17 +190,12 @@ export default {
       this.userName = name
       this.userEmail = email
       this.heading = this.headingHomepage
-      this.showCta = false
+      this.showProfileCta = false
       this.showHome = true
     },
-    playVideo() {
-      this.$refs.video.play()
-      this.$refs.video.currentTime = 0
-      this.$refs.video.muted = true // WARNING: temporary muted fix for live production
-    },
-    onEndedVideo() {
-      // this.showVideo = false
-      // this.heading = this.headingAfterVideo
+    onIntroReelEnd() {
+      this.showIntroReel = false
+      this.heading = this.headingAfterVideo
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
@@ -295,13 +229,6 @@ export default {
           this.showHome = false
         })
     },
-    setControlWidth() {
-      const currentTime = this.$refs.video.currentTime
-      const duration = this.$refs.video.duration
-      const percentage = Math.round((currentTime / duration) * 100)
-
-      this.videoCardControlWidth = percentage + '%'
-    }
   },
 }
 </script>
@@ -309,7 +236,25 @@ export default {
 <style>
 @import './assets/styles/core.css';
 
-/* <transition name="fade"> */
+/* Home blue page */
+.home-page {
+  width: 100%;
+  max-width: 100vw;
+  min-height: calc(100vh - 4vh - 160px); /* Ensure page + profile container > 100vh */
+
+  background-image: var(--gradient-primary);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.home-page > * {
+  margin: 0 20px 0 20px; /* Force page horizontal padding */
+}
+
+/* <transition name="rise"> */
 .rise-enter-active,
 .rise-leave-active {
   transition: all 0.75s ease-in-out;
@@ -319,104 +264,13 @@ export default {
   transform: translateY(100%);
 }
 
-/* Card Stack */
-.home-card {
-  background-image: var(--gradient-primary);
-  min-height: calc(100vh - 4vh - 160px);
-  width: 100%;
-  max-width: 100vw;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-content: flex-start;
+/* <transition name="fade"> */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.75s ease-in-out;
 }
-.home-card > * {
-  margin: 0 20px 0 20px;
-}
-.video-card {
-  z-index: 100;
-  position: absolute;
-  top: calc(2vh + 120px + var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
-  height: calc(100vh - 2vh - 120px - var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
-  max-width: 500px;
-  width: 100%;
-  overflow: hidden; /* Ensure video element does not produce scroll */
-
-  background: black;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-.video-card--controls {
-  position: absolute;
-  bottom: 0;
-  height: 5px;
-  background-image: none;
-
-  /* video play percent*/
-  width: 0%;
-  transition: width 0.25s linear;
-  background: var(--gradient-alt);
-  border-radius: 5px;
-}
-.video-card video {
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Social Media */
-.contact-icons {
-  position: absolute;
-  display: flex;
-  bottom: 0;
-  justify-content: space-around;
-  width: 100%;
-  background-image: var(--gradient-white);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  padding: 10px 0 15px 0;
-  box-shadow: 1px -2px 6px rgba(0, 0, 0, 0.25);
-}
-.contact-icons-stub {
-  height: 61px;
-  width: 100%;
-  max-width: 500px;
-}
-.icon {
-  width: 42px;
-  height: 42px;
-}
-
-/* Bullet list */
-.portfolio-card {
-  background-image: var(--gradient-white);
-  border-radius: var(--radius-md);
-  padding: 10px;
-  margin-bottom: 10px;
-  position: relative;
-  justify-content: space-between;
-  display: flex;
-  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
-}
-.company-name {
-  font-size: 16px;
-  font-weight: bold;
-}
-.description {
-  font-size: 14px;
-  color: #555;
-}
-.portfolio-link {
-  font-size: 14px;
-  text-decoration: none;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid var(--color-gray-2);
-  background-color: var(--color-gray-1);
-  border-radius: 25%;
-}
-.portfolio-link > svg {
-  height: 15px;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
