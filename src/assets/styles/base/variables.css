@@ -13,7 +13,7 @@
   --color-gray-9: #171f25;
   --color-black: #0e1419;
 
-  --color-bluegreen: #abe9cd;
+  --color-bluelight: #8ffffb;
   --color-blue: #3eadcf;
   --color-darkblue: rgb(30, 48, 80);
   --color-orangelight: #ebaf19;
@@ -36,9 +36,9 @@
     var(--color-gray-9) 121.15%
   );
   --gradient-primary: linear-gradient(
-    135deg, 
-    var(--color-bluegreen) 0%, 
-    var(--color-blue) 74%
+    160deg, 
+    var(--color-bluelight) 0%, 
+    var(--color-blue) 75%
   );
   --gradient-alt: linear-gradient(
     160deg,

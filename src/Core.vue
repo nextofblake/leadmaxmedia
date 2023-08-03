@@ -88,7 +88,7 @@
             </a>
           </div>
           <Break height="2vh"/>
-          <div class="welcome-icons-stub">
+          <div class="contact-icons-stub">
             <!-- Ensure fixed icon height factored into scroll -->
           </div>
         </div>
@@ -115,7 +115,7 @@
 
     <transition name="rise">
       <!-- HOME: contact icons -->
-      <div v-if="showHome" class="welcome-icons">
+      <div v-if="showHome" class="contact-icons">
         <a href="https://www.instagram.com/nextofblake" target="_blank" rel="noopener noreferrer">
           <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path
@@ -364,18 +364,18 @@ export default {
 }
 
 /* Social Media */
-.welcome-icons {
-  position: fixed;
+.contact-icons {
+  position: absolute;
   display: flex;
   bottom: 0;
   justify-content: space-around;
   width: 100%;
   background-image: var(--gradient-white);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
-  padding: 10px 0 5px 0;
+  padding: 10px 0 15px 0;
   box-shadow: 1px -2px 6px rgba(0, 0, 0, 0.25);
 }
-.welcome-icons-stub {
+.contact-icons-stub {
   height: 61px;
   width: 100%;
   max-width: 500px;
