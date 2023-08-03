@@ -11,6 +11,8 @@
           :controls="false"
           :disablepictureinpicture="true"
           :playsinline="true"
+          :poster="poster"
+          :preload="true"
           @click.prevent="toggleVideo"
           @timeupdate="setControlWidth"
           @ended="onEndedVideo"
@@ -52,6 +54,10 @@
     name: 'VideoCard',
     props: {
       src: {
+        type: String,
+        required: true,
+      },
+      poster: {
         type: String,
         required: true,
       },

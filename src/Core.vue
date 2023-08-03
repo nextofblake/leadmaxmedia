@@ -19,7 +19,7 @@
       <transition name="rise">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.checkup" :bounceIcon="videoCardBounce" style="max-width: 500px;">
+          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :bounceIcon="videoCardBounce" style="max-width: 500px;">
             <template #footer>
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span>Brand Checkup</span>
@@ -33,7 +33,7 @@
             </template>
           </VideoCard>
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.meeting" style="max-width: 500px;">
+          <VideoCard  :src="videoService.meeting" :poster="videoService.meetingPoster" style="max-width: 500px;">
             <template #footer>
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span>15 Minute Chat</span>
