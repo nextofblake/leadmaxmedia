@@ -15,6 +15,13 @@ body {
   width: 8px; /* width of the scrollbar */
 }
 
+/* Hide the scrollbar on mobile devices */
+@media screen and (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
 /* Style for the scrollbar handle (thumb) */
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-gray-5); /* color of the handle */
