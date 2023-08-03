@@ -2,15 +2,22 @@ import { reactive } from 'vue'
 
 const VideoService = reactive({
   intro: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/intro.mp4',
-  services: 'services.mp4',
-  meeting: 'meeting.mp4',
+  checkup: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/checkup.MP4',
+  meeting: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/meeting.MP4',
   loaded: false,
   load() {
     console.log('VideoService@load')
-    // intro video MUST load
-    const image = new Image()
-    image.onload = () => (this.loaded = true)
-    image.src = this.intro
+    const intro = new Image()
+    intro.onload = () => (this.loaded = true)
+    intro.src = this.intro
+
+    const checkup = new Image()
+    checkup.onload = () => (this.loaded = true)
+    checkup.src = this.checkup
+
+    const meeting = new Image()
+    meeting.onload = () => (this.loaded = true)
+    meeting.src = this.meeting
   }
 })
 
