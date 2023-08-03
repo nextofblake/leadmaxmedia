@@ -11,17 +11,6 @@ const VideoService = reactive({
     const image = new Image()
     image.onload = () => (this.loaded = true)
     image.src = this.intro
-  },
-  exitFullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
   }
 })
 
