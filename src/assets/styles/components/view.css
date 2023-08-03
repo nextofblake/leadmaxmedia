@@ -2,8 +2,9 @@
   min-height: 100vh;
   width: 100vw;
   position: absolute;
-  overflow-y: scroll; /* See styles/elements/body.css for info */
   transition: background 0.75s ease;
+
+  overflow-y: scroll; /* See styles/elements/body.css for info */
 }
 .view--blue {
   background-image: var(--gradient-primary);
