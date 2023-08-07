@@ -1,0 +1,17 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul > li {
+  font-size: var(--font-size-sm);
+  margin-bottom: 5px;
+}
+ul > li:last-child {
+  margin-bottom: 5px;
+}
+
+/* li:before {
+  content: "•";
+  margin-right: 8px;
+} */

@@ -19,10 +19,17 @@
       <transition name="rise">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :bounceIcon="videoCardBounce" style="max-width: 500px;">
+          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
             <template #footer>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span>Brand Checkup</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                  <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
+                  <Break height="10px"/>
+                  <ul>
+                    <li>🧑🏻‍⚕️ Mobile health</li>
+                    <li>🕸️ Web reputation</li>
+                  </ul>
+                </div>
                 <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
                   <span v-if="!loadingSalesEmail">Free</span>
                   <span v-if="loadingSalesEmail">
@@ -35,8 +42,15 @@
           <Break height="2vh"/>
           <VideoCard  :src="videoService.meeting" :poster="videoService.meetingPoster" style="max-width: 500px;">
             <template #footer>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span>15 Minute Chat</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                  <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
+                  <Break height="10px"/>
+                  <ul>
+                    <li>🕒️ 1-1 meeting</li>
+                    <li>💸 Pricing models</li>
+                  </ul>
+                </div>
                 <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
                   <span v-if="!loadingMeetingEmail">Book</span>
                   <span v-if="loadingMeetingEmail">
@@ -59,7 +73,7 @@
             <PortfolioCard 
               name="Nukshuk"
               description="A habit tracking app"
-              link="https://coach.nukshuk.com"
+              link="https://nukshuk.com"
               iconName="paperclip"
             />
             <PortfolioCard 
@@ -134,9 +148,9 @@ export default {
       showProfileCta: false,
       showHome: false,
       showIntroReel: false,
+      showVideoPreview: false,
       userEmail: '',
       userName: '',
-      videoCardBounce: 0,
     }
   },
   mounted() {
@@ -168,11 +182,11 @@ export default {
           // show video if route = /intro
           this.showIntroReel = this.$route.path === '/intro'
           this.profileService.flipImage().then(() => {
-            if (!this.showIntroReel) setTimeout(() => this.videoCardBounce++, 1000)
+            this.showVideoPreview = true
           })
           break
         case this.headingAfterVideo:
-          setTimeout(() => this.videoCardBounce++, 1000)
+          console.log('Do something after intro video')
           break
         case this.headingSuccessMsg:
           this.profileService.flipImage().then(() => {

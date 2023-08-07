@@ -4,131 +4,150 @@
     this is to make it work for all mobile devices, it is a HACK!
 -->
 <template>
-    <div ref="self" class="card">
-      <div class="card-head">
-        <video 
-          ref="video"
-          :controls="false"
-          :disablepictureinpicture="true"
-          :playsinline="true"
-          :poster="poster"
-          :preload="true"
-          @click.prevent="toggleVideo"
-          @timeupdate="setControlWidth"
-          @ended="onEndedVideo"
-        >
-          <source :src="src" type="video/mp4" />
-        </video>
-        <div class="card-head--controls" :style="{ width: controlWidth }"></div>
-        <div class="card-head--overlay" :class="{ 'card-head--overlay-playing': playing }" @click.prevent="toggleVideo">
-          <span class="card-head--overlay-title"><slot name="title"></slot></span>
-          <div class="card-head--overlay-icon-wrapper">
-            <!-- 
-              Property "bounce" was accessed during render but is not defined on instance.
-              It's because @enter="bounce" is keyframe not a method/data on component
-            -->
-            <transition @enter="bounce" appear>
-              <svg 
-                v-show="showIcon" 
-                class="card-head--overlay-icon" 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 384 512"
-              >
-                
-                <path style="fill: var(--color-gray-3)" d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"/>
-              </svg>
-            </transition>
-          </div>
-          <div></div>
+  <div ref="self" class="card">
+    <div class="card-head">
+      <video 
+        ref="video"
+        :controls="false"
+        :disablepictureinpicture="true"
+        :playsinline="true"
+        :poster="poster"
+        :preload="true"
+        @click.prevent="toggleVideo"
+        @timeupdate="setControlWidth"
+        @loadeddata="isPlayable = true"
+        @ended="onEndedVideo"
+      >
+        <source :src="src" type="video/mp4" />
+      </video>
+      <div class="card-head--controls" :style="{ width: controlWidth }"></div>
+      <div class="card-head--overlay" :class="{ 'card-head--overlay-playing': playing }" @click.prevent="toggleVideo">
+        <span class="card-head--overlay-title"><slot name="title"></slot></span>
+        <div class="card-head--overlay-icon-wrapper">
+          <svg
+            v-if="isPlayable"
+            class="card-head--overlay-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+          >
+            <path style="fill: var(--color-gray-3)" d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/>
+          </svg>
         </div>
-      </div>
-      <div class="card-footer">
-        <slot name="footer"></slot>
+        <div></div>
       </div>
     </div>
-  </template>
+    <div class="card-footer">
+      <slot name="footer"></slot>
+    </div>
+  </div>
+</template>
   
-  <script>
+<script>
 
-  export default {
-    name: 'VideoCard',
-    props: {
-      src: {
-        type: String,
-        required: true,
-      },
-      poster: {
-        type: String,
-        required: true,
-      },
-      bounceIcon: {
-        type: Number,
-        required: false,
-        default: 0
-      }
+import { fromEvent, interval } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+
+export default {
+  name: 'VideoCard',
+  props: {
+    src: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        playing: false,
-        controlWidth: '0%',
-        showIcon: false,
-      }
+    poster: {
+      type: String,
+      required: true,
     },
-    mounted() {
-      document.addEventListener('click', this.onClickAwayVideo)
+    showPreview: {
+      type: Boolean,
+      default: false,
     },
-    watch: {
-      bounceIcon: {
-        handler() {
-          this.showIcon = true
-          setTimeout(() => this.showIcon = false, 500)
-        }
-      }
+  },
+  data() {
+    return {
+      playing: false,
+      isPlayable: false,
+      showIcon: false,
+      controlWidth: '0%',
+      loopSubscription: null,
+    }
+  },
+  mounted() {
+    document.addEventListener('click', this.onClickAwayVideo)
+  },
+  watch: {
+    showPreview: {
+      handler() {
+        this.startPreview()
+      } 
+    }
+  },
+  methods: {
+    startPreview() {
+      this.$refs.video.muted = true
+      this.$refs.video.currentTime = 0.5
+      this.$refs.video.play()
+
+      const loopInterval$ = interval(4000)
+      const videoEnded$ = fromEvent(this.$refs.video, 'ended')
+
+      this.loopSubscription = loopInterval$
+        .pipe(takeUntil(videoEnded$))
+        .subscribe(() => {
+          this.$refs.video.muted = true
+          this.$refs.video.currentTime = 0.5
+          this.$refs.video.play()
+        })
     },
-    methods: {
-      toggleVideo() {
-        if (this.playing) {
-          this.stopVideo()
-        } else {
-          this.startVideo()
-        }
-      },
-      startVideo() {
-        this.$refs.video.play()
-        this.$refs.video.currentTime = 0
-        this.$refs.video.muted = true // WARNING: temporary muted fix for live production
-  
-        this.playing = true
-        this.$refs.self.classList.add('card--hovering')
-      },
-      stopVideo() {
-        this.$refs.video.muted = true
-  
-        this.playing = false
-        this.$refs.self.classList.remove('card--hovering')
-      },
-      onEndedVideo() {
-        this.$refs.video.currentTime = 0
+    toggleVideo() {
+      if (!this.isPlayable) return
+
+      if (this.playing) {
         this.stopVideo()
-      },
-      onClickAwayVideo(event) {
-        window.lastVid = this.$refs.self
-        window.lastClick = event
-        // stop video if playing and clicked off
-        if (this.playing && this.$refs.self && !this.$refs.self.contains(event.target)) {
-          this.stopVideo()
-        }
-      },
-      setControlWidth() {
-        const currentTime = this.$refs.video.currentTime
-        const duration = this.$refs.video.duration
-        const percentage = Math.round((currentTime / duration) * 100)
-  
-        this.controlWidth = this.playing ? percentage + '%' : '0%'
-      },
+      } else {
+        this.startVideo()
+      }
     },
-  }
-  </script>
+    startVideo() {
+      if (this.loopSubscription) {
+        this.loopSubscription.unsubscribe()
+      }
+
+      this.playing = true
+      this.$refs.video.play()
+      this.$refs.video.muted = false
+      // REMOVED - video flickers on mobile
+      // this.$refs.self.classList.add('card--hovering')
+    },
+    stopVideo() {
+      this.playing = false
+      this.$refs.video.pause()
+      this.$refs.video.muted = true
+      // REMOVED - video flickers on mobile
+      // this.$refs.self.classList.remove('card--hovering')
+    },
+    onEndedVideo() {
+      this.$refs.video.currentTime = 0
+      this.stopVideo()
+    },
+    onClickAwayVideo(event) {
+      window.lastVid = this.$refs.self
+      window.lastClick = event
+      // stop video if playing and clicked off
+      if (this.playing && this.$refs.self && !this.$refs.self.contains(event.target)) {
+        this.stopVideo()
+      }
+    },
+    setControlWidth() {
+      const currentTime = this.$refs.video.currentTime
+      const duration = this.$refs.video.duration
+      const percentage = Math.round((currentTime / duration) * 100)
+
+      this.controlWidth = this.playing ? percentage + '%' : '0%'
+    },
+  },
+}
+</script>
 
 <style scoped>
 .card {
@@ -138,9 +157,9 @@
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 1s ease; /* Hover effect */
 }
-.card--hovering {
+/* .card--hovering {
   transform: scale(1.05);
-}
+} */
 .card-shadow {
   box-shadow: 3px 3px 5px var(--color-gray-6);
 }
@@ -193,7 +212,7 @@
   position: absolute;
   bottom: -3px;
   height: 3px;
-  background-image: none;
+  background-image: var(--gradient-alt);
   border-radius: 3px;
 
   /* video play percent*/
@@ -231,29 +250,6 @@
 }
 .card-head--overlay-icon {
   height: 40px;
-  animation: bounce 1.5s
-}
-.card-head--overlay-icon path {
-  fill: var(--color-gray-9);
-}
-
-/* <transition name="bounce"> */
-@keyframes bounce {
-  0%, 10%, 50%, 90%, 100% {
-    transform: translateY(10px);
-  }
-  20% {
-    transform: translateY(-10px);
-  }
-  40% {
-    transform: translateY(0);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
-  80% {
-    transform: translateY(0);
-  }
 }
 </style>
   
