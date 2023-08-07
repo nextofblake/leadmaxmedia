@@ -2,10 +2,10 @@ import { reactive } from 'vue'
 
 const VideoService = reactive({
   intro: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/intro.mp4',
-  checkup: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/checkup.MP4',
-  meeting: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/meeting.MP4',
-  checkupPoster: 'checkup-poster.png',
-  meetingPoster: 'meeting-poster.png',
+  checkup: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/checkup.mp4',
+  meeting: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/meeting.mp4',
+  checkupPoster: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/checkup-poster.png',
+  meetingPoster: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/meeting-poster.png',
   loaded: false,
   load() {
     console.log('VideoService@load')

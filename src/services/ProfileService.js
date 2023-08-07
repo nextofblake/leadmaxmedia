@@ -1,8 +1,8 @@
 import { reactive } from 'vue'
 
 const ProfileService = reactive({
-  frontImage: 'blake-profile.png',
-  logoActive: 'logo-active.png',
+  frontImage: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/blake-profile.png',
+  logoActive: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/logo-active.png',
   logoWhite: 'logo-white.png',
   loaded: false,
   showFront: true,

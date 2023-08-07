@@ -12,11 +12,10 @@
         :disablepictureinpicture="true"
         :playsinline="true"
         :poster="poster"
-        preload="auto"
         @click.prevent="toggleVideo"
         @timeupdate="setControlWidth"
-        @progress="startPreview"
-        @loadeddata="isPlayable = true"
+        @progress="onProgress"
+        @canplaythrough="isPlayable = true"
         @ended="onEndedVideo"
       >
         <source :src="src" type="video/mp4" />
@@ -45,8 +44,7 @@
   
 <script>
 
-import { fromEvent, interval } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { interval } from 'rxjs'
 
 export default {
   name: 'VideoCard',
@@ -62,10 +60,6 @@ export default {
     showPreview: {
       type: Boolean,
       default: false,
-    },
-    timeStart: {
-      type: Number,
-      default: 0
     }
   },
   data() {
@@ -78,37 +72,58 @@ export default {
     }
   },
   mounted() {
+    this.$refs.video.load() // Force video load
     document.addEventListener('click', this.onClickAwayVideo)
   },
   watch: {
     showPreview: {
       handler() {
-        this.startPreview()
+        this.onProgress()
       }
     }
   },
   methods: {
-    startPreview() {
+    onProgress() {
+      if (this.$refs.video.buffered.length === 0) return
+
+      // At least 1 second is loaded
+      if (this.$refs.video.buffered.end(0) > 0) {
+        this.startLoopPreview()
+      }
+    },
+    onEndedVideo() {
+      this.stopVideo()
+    },
+    onClickAwayVideo(event) {
+      window.lastVid = this.$refs.self
+      window.lastClick = event
+      // stop video if playing and clicked off
+      if (this.playing && this.$refs.self && !this.$refs.self.contains(event.target)) {
+        this.stopVideo()
+      }
+    },
+    startLoopPreview() {
       if (
-        this.playing ||                         // No preview when playing 
-        !this.showPreview ||                    // No preview when unspecified
-        this.$refs.video.buffered.end(0) <  3   // No preview when unloaded 3 sec
+        this.playing ||                 // No preview when playing 
+        !this.showPreview ||            // No preview when unspecified
+        this.loopSubscription !== null  // No preview when previewing
       ) return
 
       this.$refs.video.muted = true
       this.$refs.video.currentTime = 0.5
       this.$refs.video.play()
 
-      const loopInterval$ = interval(2000)
-      const videoEnded$ = fromEvent(this.$refs.video, 'ended')
-
-      this.loopSubscription = loopInterval$
-        .pipe(takeUntil(videoEnded$))
+      this.loopSubscription ??= interval(2000)
         .subscribe(() => {
-          this.$refs.video.muted = true
           this.$refs.video.currentTime = 0.5
           this.$refs.video.play()
         })
+    },
+    cancelLoopPreview() {
+      if (this.loopSubscription) {
+        this.loopSubscription.unsubscribe()
+        this.loopSubscription = null
+      }
     },
     toggleVideo() {
       if (!this.isPlayable) return
@@ -120,37 +135,22 @@ export default {
       }
     },
     startVideo() {
-      if (this.loopSubscription) {
-        this.loopSubscription.unsubscribe()
-      }
+      this.cancelLoopPreview()
 
-      if (this.timeStart) this.$refs.video.currentTime = this.timeStart
       this.playing = true
+      this.$refs.self.classList.add('card--hovering')
       this.$refs.video.play()
       this.$refs.video.muted = false
-      // REMOVED - video flickers on mobile
-      // this.$refs.self.classList.add('card--hovering')
+      this.$refs.video.currentTime = 0
     },
     stopVideo() {
       this.playing = false
+      this.$refs.self.classList.remove('card--hovering')
       this.$refs.video.pause()
       this.$refs.video.muted = true
-
-      this.startPreview()
-      // REMOVED - video flickers on mobile
-      // this.$refs.self.classList.remove('card--hovering')
-    },
-    onEndedVideo() {
       this.$refs.video.currentTime = 0
-      this.stopVideo()
-    },
-    onClickAwayVideo(event) {
-      window.lastVid = this.$refs.self
-      window.lastClick = event
-      // stop video if playing and clicked off
-      if (this.playing && this.$refs.self && !this.$refs.self.contains(event.target)) {
-        this.stopVideo()
-      }
+
+      this.startLoopPreview()
     },
     setControlWidth() {
       const currentTime = this.$refs.video.currentTime

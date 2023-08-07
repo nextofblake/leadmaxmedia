@@ -19,17 +19,15 @@
       <transition name="rise">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" :timeStart="2.5" style="max-width: 500px;">
+          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
             <template #footer>
+              <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
+              <Break height="10px"/>
               <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <div>
-                  <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
-                  <Break height="10px"/>
-                  <ul>
-                    <li>🧑🏻‍⚕️ Mobile health</li>
-                    <li>🕸️ Web reputation</li>
-                  </ul>
-                </div>
+                <ul>
+                  <li>🧑🏻‍⚕️ Mobile health</li>
+                  <li>🕸️ Web reputation</li>
+                </ul>
                 <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
                   <span v-if="!loadingSalesEmail">Free</span>
                   <span v-if="loadingSalesEmail">
@@ -42,15 +40,13 @@
           <Break height="2vh"/>
           <VideoCard  :src="videoService.meeting" :poster="videoService.meetingPoster" style="max-width: 500px;">
             <template #footer>
+              <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
+              <Break height="10px"/>
               <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <div>
-                  <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
-                  <Break height="10px"/>
-                  <ul>
-                    <li>🕒️ 1-1 meeting</li>
-                    <li>💸 Pricing models</li>
-                  </ul>
-                </div>
+                <ul>
+                  <li>🕒️ 1-1 meeting</li>
+                  <li>💸 Pricing models</li>
+                </ul>
                 <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
                   <span v-if="!loadingMeetingEmail">Book</span>
                   <span v-if="loadingMeetingEmail">

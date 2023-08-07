@@ -122,6 +122,9 @@ export default {
   methods: {
     submit() {
       this.$emit('discover', this.name, this.email)
+
+      // Scroll back to top of page
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     runTypewriter(heading = '') {
       interval(50)
