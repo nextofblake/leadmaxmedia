@@ -12,9 +12,10 @@
         :disablepictureinpicture="true"
         :playsinline="true"
         :poster="poster"
-        :preload="true"
+        preload="auto"
         @click.prevent="toggleVideo"
         @timeupdate="setControlWidth"
+        @progress="startPreview"
         @loadeddata="isPlayable = true"
         @ended="onEndedVideo"
       >
@@ -62,6 +63,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    timeStart: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -79,16 +84,22 @@ export default {
     showPreview: {
       handler() {
         this.startPreview()
-      } 
+      }
     }
   },
   methods: {
     startPreview() {
+      if (
+        this.playing ||                         // No preview when playing 
+        !this.showPreview ||                    // No preview when unspecified
+        this.$refs.video.buffered.end(0) <  3   // No preview when unloaded 3 sec
+      ) return
+
       this.$refs.video.muted = true
       this.$refs.video.currentTime = 0.5
       this.$refs.video.play()
 
-      const loopInterval$ = interval(4000)
+      const loopInterval$ = interval(2000)
       const videoEnded$ = fromEvent(this.$refs.video, 'ended')
 
       this.loopSubscription = loopInterval$
@@ -113,6 +124,7 @@ export default {
         this.loopSubscription.unsubscribe()
       }
 
+      if (this.timeStart) this.$refs.video.currentTime = this.timeStart
       this.playing = true
       this.$refs.video.play()
       this.$refs.video.muted = false
@@ -123,6 +135,8 @@ export default {
       this.playing = false
       this.$refs.video.pause()
       this.$refs.video.muted = true
+
+      this.startPreview()
       // REMOVED - video flickers on mobile
       // this.$refs.self.classList.remove('card--hovering')
     },
@@ -157,9 +171,9 @@ export default {
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
   transition: transform 1s ease; /* Hover effect */
 }
-/* .card--hovering {
-  transform: scale(1.05);
-} */
+.card--hovering {
+  /* transform: scale(1.05); */
+}
 .card-shadow {
   box-shadow: 3px 3px 5px var(--color-gray-6);
 }

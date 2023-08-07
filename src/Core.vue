@@ -19,7 +19,7 @@
       <transition name="rise">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
+          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" :timeStart="2.5" style="max-width: 500px;">
             <template #footer>
               <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                 <div>
@@ -87,11 +87,6 @@
               description="Hunting utility app"
               link="https://huntinglocator.com"
               iconName="paperclip"
-            />
-            <PortfolioCard 
-              name="Resume"
-              description="Career Achievements"
-              iconName="download"
             />
           </div>
           <Break height="2vh"/>
