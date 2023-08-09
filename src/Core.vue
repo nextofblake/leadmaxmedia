@@ -67,25 +67,49 @@
               description="A lead generation company in fintech"
               link="https://financebuddy.com"
               iconName="paperclip"
-            />
-            <PortfolioCard 
+            >
+              <ul>
+                <li>&bull; Detailed reporting for affiliate advertisers</li>
+                <li>&bull; Worked in large team, hitting deliverables</li>
+                <li>&bull; Analyzed A/B tests for thousands of users</li>
+              </ul>
+            </PortfolioCard>
+            <PortfolioCard
               name="Nukshuk"
               description="A habit tracking app"
               link="https://nukshuk.com"
               iconName="paperclip"
-            />
+            >
+              <ul style="font-size: var(--font-size-xs);">
+                <li>&bull; Total redesign w/ pro UX designer</li>
+                <li>&bull; Deployed 24/7 cloud Docker Swarm</li>
+                <li>&bull; Project management of coaching platform</li>
+              </ul>
+            </PortfolioCard>
             <PortfolioCard 
               name="Snapfi"
               description="Mortgage lead application"
               link="https://snapfi.com"
               iconName="paperclip"
-            />
+            >
+              <ul>
+                <li>&bull; SEO for leads of mortgage application</li>
+                <li>&bull; Created api itegration for housing pricing</li>
+                <li>&bull; Visulized data graphs for web users</li>
+              </ul>
+            </PortfolioCard>
             <PortfolioCard 
               name="Hunting Locator"
               description="Hunting utility app"
               link="https://huntinglocator.com"
               iconName="paperclip"
-            />
+            >
+              <ul>
+                <li>&bull; Tools for hunters to track animal sightings</li>
+                <li>&bull; Integrated Google Maps capabilities</li>
+                <li>&bull; Refactored codebase for futureproofing</li>
+              </ul>
+            </PortfolioCard>
           </div>
           <Break height="2vh"/>
           <ContactsFooter/>
