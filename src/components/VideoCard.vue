@@ -227,11 +227,6 @@ export default {
   * Video Cards 
   * - needed to apply styling directly to the video slot
   */
-.card-body--title {
-  font-size: 2.5rem;
-  font-family: var(--font-family-big);
-  color: var(--color-gray-7);
-}
 .card-head > * {
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
@@ -277,6 +272,7 @@ export default {
 }
 .card-head--overlay-title {
   margin-top: 10px;
+  font-size: var(--font-size-xl);
   pointer-events: none; /** WARNING: this disables @click event */
 }
 .card-head--overlay-icon-wrapper {
