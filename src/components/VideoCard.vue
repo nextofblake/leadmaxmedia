@@ -4,7 +4,7 @@
     this is to make it work for all mobile devices, it is a HACK!
 -->
 <template>
-  <div ref="self" class="card">
+  <div ref="self" class="card" :class="{'card--playing': playing, 'card--hide-video' : hideVideo}">
     <div class="card-head">
       <video 
         ref="video"
@@ -12,28 +12,37 @@
         :disablepictureinpicture="true"
         :playsinline="true"
         :poster="poster"
-        @click.prevent="toggleVideo"
         @timeupdate="setControlWidth"
         @progress="onProgress"
-        @canplaythrough="isPlayable = true"
+        @canplaythrough="onPlayable"
         @ended="onEndedVideo"
       >
-        <source :src="src" type="video/mp4" />
+        <source v-if="networkService.supportsVideo" :src="src" type="video/mp4" />
       </video>
       <div class="card-head--controls" :style="{ width: controlWidth }"></div>
-      <div class="card-head--overlay" :class="{ 'card-head--overlay-playing': playing }" @click.prevent="toggleVideo">
-        <span class="card-head--overlay-title"><slot name="title"></slot></span>
+      <div class="card-head--overlay" @click="toggleVideo">
+        <span class="card-head--overlay-title">
+          <slot v-if="!playing" name="title"></slot>
+        </span>
         <div class="card-head--overlay-icon-wrapper">
           <svg
-            v-if="isPlayable"
+            v-if="isPlayable && !playing"
             class="card-head--overlay-icon"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 384 512"
           >
             <path style="fill: var(--color-gray-3)" d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/>
           </svg>
+          <!-- <svg 
+            v-if="isPlayable && playing"
+            class="card-head--overlay-icon"
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 320 512"
+          >
+            <path style="fill: var(--color-gray-3)" d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/>
+          </svg> -->
         </div>
-        <div></div>
+        <Break height="40px"></Break>
       </div>
     </div>
     <div class="card-footer">
@@ -43,8 +52,8 @@
 </template>
   
 <script>
-
-import { interval } from 'rxjs'
+import { inject } from 'vue'
+import Break from './Break.vue'
 
 export default {
   name: 'VideoCard',
@@ -62,17 +71,31 @@ export default {
       default: false,
     }
   },
+  components: {
+    Break,
+  },
+  setup() {
+    return {
+      devService: inject('devService'),
+      networkService: inject('networkService'),
+    }
+  },
   data() {
     return {
       playing: false,
       isPlayable: false,
+      hasPlayed: false,
+      hideVideo: false,
       showIcon: false,
       controlWidth: '0%',
       loopSubscription: null,
     }
   },
   mounted() {
-    this.$refs.video.load() // Force video load
+    if (!this.devService.enabled) {
+      this.$refs.video.load() // Force video load
+      this.$refs.video.muted = true // Force muted video
+    }
     document.addEventListener('click', this.onClickAwayVideo)
   },
   watch: {
@@ -84,12 +107,19 @@ export default {
   },
   methods: {
     onProgress() {
+      if (!this.isPlayable) return
       if (this.$refs.video.buffered.length === 0) return
 
+      // Video is playable
       // At least 1 second is loaded
-      if (this.$refs.video.buffered.end(0) > 0) {
-        this.startLoopPreview()
+      // Has not been played before
+      if (this.$refs.video.buffered.end(0) > 0 && !this.hasPlayed) {
+        this.startPreview()
       }
+    },
+    onPlayable() {
+      // Only allow video if network connection supports it
+      this.isPlayable = this.networkService.supportsVideo
     },
     onEndedVideo() {
       this.stopVideo()
@@ -102,28 +132,22 @@ export default {
         this.stopVideo()
       }
     },
-    startLoopPreview() {
+    startPreview() {
       if (
-        this.playing ||                 // No preview when playing 
-        !this.showPreview ||            // No preview when unspecified
-        this.loopSubscription !== null  // No preview when previewing
+        this.playing ||                  // No preview when playing 
+        !this.showPreview ||             // No preview when unspecified
+        this.loopSubscription !== null   // No preview when previewing
       ) return
 
-      this.$refs.video.muted = true
+      // Begin preview
       this.$refs.video.currentTime = 0.5
-      this.$refs.video.play()
+      this.startFirstVideo()
 
-      this.loopSubscription ??= interval(2000)
-        .subscribe(() => {
-          this.$refs.video.currentTime = 0.5
-          this.$refs.video.play()
-        })
-    },
-    cancelLoopPreview() {
-      if (this.loopSubscription) {
-        this.loopSubscription.unsubscribe()
-        this.loopSubscription = null
-      }
+      // Stop preview
+      setTimeout(() => {
+        this.$refs.video.pause()
+        this.playing = false
+      }, 1950)
     },
     toggleVideo() {
       if (!this.isPlayable) return
@@ -135,22 +159,27 @@ export default {
       }
     },
     startVideo() {
-      this.cancelLoopPreview()
-
       this.playing = true
-      this.$refs.self.classList.add('card--hovering')
-      this.$refs.video.play()
-      this.$refs.video.muted = false
-      this.$refs.video.currentTime = 0
+
+      if (this.hasPlayed) {
+        this.$refs.video.play()
+      } else {
+        this.startFirstVideo()
+      }
+    },
+    startFirstVideo() {
+      // This method exists so that black bars do not showup when initial loading of video
+      this.hideVideo = true
+      this.hasPlayed = true
+      setTimeout(() => {
+        this.hideVideo = false
+        this.$refs.video.play()
+      }, 500)
     },
     stopVideo() {
       this.playing = false
-      this.$refs.self.classList.remove('card--hovering')
       this.$refs.video.pause()
-      this.$refs.video.muted = true
       this.$refs.video.currentTime = 0
-
-      this.startLoopPreview()
     },
     setControlWidth() {
       const currentTime = this.$refs.video.currentTime
@@ -169,17 +198,9 @@ export default {
   border-radius: var(--radius-md);
   width: 100%;
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
-  transition: transform 1s ease; /* Hover effect */
-}
-.card--hovering {
-  /* transform: scale(1.05); */
 }
 .card-shadow {
   box-shadow: 3px 3px 5px var(--color-gray-6);
-}
-.card.transparent {
-  background: transparent;
-  border: 1px solid var(--color-gray-2);
 }
 .card-head {
   position: relative;
@@ -206,9 +227,6 @@ export default {
   * Video Cards 
   * - needed to apply styling directly to the video slot
   */
-.card--hovering .card-head--overlay {
-  background: none;
-}
 .card-body--title {
   font-size: 2.5rem;
   font-family: var(--font-family-big);
@@ -233,7 +251,7 @@ export default {
   width: 0%;
   transition: width 0.25s linear;
 }
-.card--hovering .card-head--controls {
+.card--playing .card-head--controls {
   background: var(--gradient-alt);
 }
 .card-head--overlay {
@@ -242,19 +260,24 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   color: var(--color-gray-2);
+  background: rgba(0, 0, 0, 0.5);
+  transition: background 0.25s;
 
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
 }
-.card-head--overlay-playing {
-  display: none;
+.card--hide-video .card-head--overlay {
+  background: rgba(0, 0, 0, 1) !important; /** Background black for mobile support */
+}
+.card--playing .card-head--overlay {
+  background: rgba(0, 0, 0, 0); /** Background transparent */
 }
 .card-head--overlay-title {
   margin-top: 10px;
+  pointer-events: none; /** WARNING: this disables @click event */
 }
 .card-head--overlay-icon-wrapper {
   margin: 10px;
@@ -264,6 +287,7 @@ export default {
 }
 .card-head--overlay-icon {
   height: 40px;
+  pointer-events: none; /** WARNING: this disables @click event */
 }
 </style>
   

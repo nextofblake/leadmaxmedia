@@ -7,11 +7,8 @@ const VideoService = reactive({
   checkupPoster: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/checkup-poster.png',
   meetingPoster: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/meeting-poster.png',
   loaded: false,
-  load() {
-    console.log('VideoService@load')
-    // const intro = new Image()
-    // intro.onload = () => (this.loaded = true)
-    // intro.src = this.intro
+  boot() {
+    console.log('VideoService@boot')
 
     const checkup = new Image()
     checkup.onload = () => (this.loaded = true)

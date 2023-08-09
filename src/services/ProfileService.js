@@ -7,10 +7,13 @@ const ProfileService = reactive({
   loaded: false,
   showFront: true,
   activeLogo: false,
-  load() {
+  boot() {
     // front image MUST load
     const image = new Image()
-    image.onload = () => (this.loaded = true)
+    image.onload = () => {
+      this.loaded = true
+      console.log('ProfileService@boot', 'loaded: ', this.loaded)
+    }
     image.src = this.frontImage
 
     // back image lazy load

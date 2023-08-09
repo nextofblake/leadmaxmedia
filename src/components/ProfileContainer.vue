@@ -96,9 +96,6 @@ export default {
       email: '',
     }
   },
-  mounted() {
-    this.profileService.load()
-  },
   watch: {
     heading: {
       handler(next) {

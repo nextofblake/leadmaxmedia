@@ -1,8 +1,10 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Core from './Core.vue';
+import DevService from './services/DevService';
 import EmailService from './services/EmailService';
 import EventService from './services/EventService';
+import NetworkService from './services/NetworkService';
 import ProfileService from './services/ProfileService';
 import VideoService from './services/VideoService';
 
@@ -39,6 +41,8 @@ app.use(router)
  */
 app.provide('emailService', EmailService)
 app.provide('eventService', EventService)
+app.provide('devService', DevService)
+app.provide('networkService', NetworkService)
 app.provide('profileService', ProfileService)
 app.provide('videoService', VideoService)
 

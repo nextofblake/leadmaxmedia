@@ -20,12 +20,13 @@
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
           <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
+            <template #title>Are You Mobile First?</template>
             <template #footer>
               <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
               <Break height="10px"/>
               <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                 <ul>
-                  <li>🧑🏻‍⚕️ Mobile health</li>
+                  <li>❤️‍🩹 Mobile health</li>
                   <li>🕸️ Web reputation</li>
                 </ul>
                 <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
@@ -39,6 +40,7 @@
           </VideoCard>
           <Break height="2vh"/>
           <VideoCard  :src="videoService.meeting" :poster="videoService.meetingPoster" style="max-width: 500px;">
+            <template #title>Book Zoom Meeting</template>
             <template #footer>
               <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
               <Break height="10px"/>
@@ -121,6 +123,8 @@ export default {
     return {
       emailService: inject('emailService'),
       eventService: inject('eventService'),
+      devService: inject('devService'),
+      networkService: inject('networkService'),
       profileService: inject('profileService'),
       videoService: inject('videoService'),
     }
@@ -144,10 +148,14 @@ export default {
       userName: '',
     }
   },
-  mounted() {
+  created() {
+    // Client checks
+    this.networkService.boot()
+    this.devService.boot()
+
     // Load assets
-    this.profileService.load()
-    this.videoService.load()
+    this.profileService.boot()
+    this.videoService.boot()
   },
   methods: {
     onAppLoaded() {
@@ -155,7 +163,7 @@ export default {
       this.heading = this.headingIntro
 
       // DEV MODE: ?dev=1
-      if (this.$route.query.dev) {
+      if (this.devService.enabled) {
         this.userName = 'LxM Mailinator'
         this.userEmail = 'lxm@mailinator.com'
         this.heading = this.headingHomepage
