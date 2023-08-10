@@ -4,10 +4,11 @@ import Core from './Core.vue';
 import DevService from './services/DevService';
 import EmailService from './services/EmailService';
 import EventService from './services/EventService';
+import ImageService from './services/ImageService';
 import NetworkService from './services/NetworkService';
 import ProfileService from './services/ProfileService';
+import ScrollService from './services/ScrollService';
 import VideoService from './services/VideoService';
-import ImageService from './services/ImageService';
 
 /**
  * Create Vue app
@@ -46,6 +47,7 @@ app.provide('eventService', EventService)
 app.provide('imageService', ImageService)
 app.provide('networkService', NetworkService)
 app.provide('profileService', ProfileService)
+app.provide('scrollService', ScrollService)
 app.provide('videoService', VideoService)
 
 app.mount('#app')

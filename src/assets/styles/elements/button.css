@@ -39,9 +39,9 @@ button:hover {
   mix-blend-mode: initial;
 }
 .button--blue {
-  border-color: var(--color-blue);
+  border-color: var(--color-lightcyan);
   background-color: transparent;
-  color: var(--color-blue);
+  color: var(--color-lightcyan);
 }
 .button--blue:hover {
   border-color: var(--color-gray-1);

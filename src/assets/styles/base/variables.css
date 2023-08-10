@@ -13,8 +13,9 @@
   --color-gray-9: #171f25;
   --color-black: #0e1419;
 
-  --color-bluelight: #8ffffb;
-  --color-blue: #3eadcf;
+  --color-lightgreen: #99ffdc;
+  --color-lightcyan: #33ccff;
+  --color-cornflower: #5c8ce8;
   --color-darkblue: rgb(30, 48, 80);
   --color-orangelight: #ebaf19;
   --color-orange: #e65200;
@@ -37,9 +38,10 @@
     var(--color-gray-9) 121.15%
   );
   --gradient-primary: linear-gradient(
-    160deg, 
-    var(--color-bluelight) 0%, 
-    var(--color-blue) 75%
+    172.5deg, 
+    var(--color-lightgreen) 0%, 
+    var(--color-lightcyan) 75%,
+    var(--color-cornflower) 100%
   );
   --gradient-alt: linear-gradient(
     160deg,

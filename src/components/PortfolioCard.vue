@@ -47,6 +47,10 @@ export default {
     image: {
       type: String
     },
+    startExpanded: {
+      type: Boolean,
+      default: false,
+    },
     iconName: {
       type: String,
       validator: (value) => {
@@ -57,18 +61,24 @@ export default {
     },
   },
   watch: {
+    startExpanded: {
+      handler() {
+        this.expanded = true
+      }
+    },
     expanded: {
       handler(expanded) {
+        if (this.isFirstExpandedUpdate && this.startExpanded) {
+          // prevent startExpanded from scroll behavior
+          this.isFirstExpandedUpdate = false
+          return
+        }
+        if (expanded) {
+          this.scrollService.fixScrollToBottom(500)
+        }
         setTimeout(() => {
-          if (expanded) {
-            this.$refs.self.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center',
-            })
-          }
-
           this.afterExpanded = expanded
-        }, 200)
+        }, 500)
       }
     }
   },
@@ -91,14 +101,19 @@ export default {
   },
   setup() {
     return {
-      imageService: inject('imageService')
+      imageService: inject('imageService'),
+      scrollService: inject('scrollService'),
     }
   },
   data() {
     return {
       expanded: false,
       afterExpanded: false,
+      isFirstExpandedUpdate: true,
     }
+  },
+  mounted() {
+    this.expanded = this.startExpanded
   },
   methods: {
     navigate() {
@@ -188,7 +203,7 @@ export default {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
-  border: 4px solid var(--color-gray-2);
+  border: 4px solid var(--color-gray-1);
 }
 .styled-image {
   object-fit: cover;

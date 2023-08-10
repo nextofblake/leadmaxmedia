@@ -68,6 +68,7 @@
               link="https://financebuddy.com"
               iconName="paperclip"
               :image="imageService.financeBuddy"
+              :startExpanded="true"
             >
               <ul>
                 <li>&bull; Detailed reporting for affiliate advertisers</li>
@@ -116,7 +117,7 @@
             </PortfolioCard>
           </div>
           <Break height="2vh"/>
-          <ContactsFooter/>
+          <ContactsFooter id="footer"/>
         </div>
       </transition>
 
