@@ -1,19 +1,21 @@
 <template>
-  <div class="video-card">
-    <!-- Reel -->
-    <video 
-      ref="video"
-      :autoplay="true"
-      :controls="false"
-      :disablepictureinpicture="true"
-      :playsinline="true"
-      @timeupdate="setProgressWidth"
-      @ended="$emit('ended')"
-    >
-      <source :src="videoService.intro" type="video/mp4" />
-    </video>
-    <!-- Reel Progress -->
-    <div class="video-card--progress" :style="{ width: reelProgressWidth }"></div>
+  <div class="reel-wrapper">
+    <div class="reel-card">
+      <!-- Reel -->
+      <video 
+        ref="video"
+        :autoplay="true"
+        :controls="false"
+        :disablepictureinpicture="true"
+        :playsinline="true"
+        @timeupdate="setProgressWidth"
+        @ended="$emit('ended')"
+      >
+        <source :src="videoService.intro" type="video/mp4" />
+      </video>
+      <!-- Reel Progress -->
+      <div class="reel-card--progress" :style="{ width: reelProgressWidth }"></div>
+    </div>
   </div>
 </template>
   
@@ -46,19 +48,24 @@ export default {
   
 <style scoped>
 @import '../assets/styles/core.css';
-.video-card {
+.reel-wrapper {
   z-index: 100;
   position: absolute;
-  top: calc(2vh + 120px + var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
-  height: calc(100vh - 2vh - 120px - var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
+  top: calc(4vh + 120px + var(--global-viewPadding) + var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
+  height: calc(100vh - 4vh - 120px - var(--global-viewPadding) - var(--global-viewPadding)); /* ProfileContainer shrunk top margin */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.reel-card {
+  position: relative;
   max-width: 500px;
   width: 100%;
   overflow: hidden; /* Ensure video element does not produce scroll */
-
   background: black;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
-.video-card--progress {
+.reel-card--progress {
   position: absolute;
   bottom: 0;
   height: 5px;
@@ -70,7 +77,7 @@ export default {
   background: var(--gradient-alt);
   border-radius: 5px;
 }
-.video-card video {
+.reel-card video {
   width: 100%;
   object-fit: cover;
 }

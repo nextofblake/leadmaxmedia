@@ -4,10 +4,10 @@ const NetworkSpeed = require('network-speed');
 const NetworkService = reactive({
   supportsVideo: false,
   downloadSpeed: 0, // Mbps
-  cdnCheckUrl: 'https://eu.httpbin.org/stream-bytes/500000',
+  cdnCheckUrl: 'https://lxmbucket.nyc3.cdn.digitaloceanspaces.com/500000',
   async boot() {
-    await this.getNetworkDownloadSpeed() // Safari, Firefox
-
+    await this.getNetworkDownloadSpeed()
+    
     console.log('NetworkService@boot', 'downloadSpeed', this.downloadSpeed, 'supportsVideo: ', this.supportsVideo)
   },
   async getNetworkDownloadSpeed() {

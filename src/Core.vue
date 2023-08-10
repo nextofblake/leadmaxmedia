@@ -10,7 +10,7 @@
       <ProfileContainer
         :showCta="showProfileCta"
         :heading="heading"
-        :shrink="showHome"
+        :shrink="shrinkProfile"
         @printed="onPrinted"
         @discover="onDiscover"
       />
@@ -162,9 +162,9 @@ export default {
   data() {
     return {
       heading: '',
-      headingIntro: 'Hello, my name is Blake',
+      headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
-      headingAfterVideo: 'Let\'s connect',
+      headingIntroReel: 'Greetings, ',
       headingSuccessMsg: 'Thanks, check your inbox',
       headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'I will reply in <48hr',
@@ -174,6 +174,7 @@ export default {
       showHome: false,
       showIntroReel: false,
       showVideoPreview: false,
+      shrinkProfile: false,
       userEmail: '',
       userName: '',
     }
@@ -212,14 +213,12 @@ export default {
           break
 
         case this.headingHomepage:
-          // show video if route = /intro
-          this.showIntroReel = this.$route.path === '/intro'
           this.profileService.flipImage().then(() => {
             this.showVideoPreview = true
           })
           break
-        case this.headingAfterVideo:
-          console.log('Do something after intro video')
+        case this.headingIntroReel:
+          console.log('Do something on intro video')
           break
         case this.headingSuccessMsg:
           this.profileService.flipImage().then(() => {
@@ -236,13 +235,23 @@ export default {
     onDiscover(name, email) {
       this.userName = name
       this.userEmail = email
-      this.heading = this.headingHomepage
       this.showProfileCta = false
-      this.showHome = true
+      this.shrinkProfile = true
+
+      if (this.$route.path === '/intro') {
+        this.showHome = false
+        this.showIntroReel = true
+        this.heading = this.headingIntroReel + this.userName
+      } else {
+        this.showHome = true
+        this.showIntroReel = false
+        this.heading = this.headingHomepage
+      }
     },
     onIntroReelEnd() {
       this.showIntroReel = false
-      this.heading = this.headingAfterVideo
+      this.showHome = true
+      this.heading = this.headingHomepage
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
@@ -304,7 +313,7 @@ export default {
 /* <transition name="rise"> */
 .rise-enter-active,
 .rise-leave-active {
-  transition: all 0.75s ease-in-out;
+  transition: transform 0.75s ease-in-out;
 }
 .rise-enter-from,
 .rise-leave-to {
