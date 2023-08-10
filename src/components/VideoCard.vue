@@ -141,13 +141,7 @@ export default {
 
       // Begin preview
       this.$refs.video.currentTime = 0.5
-      this.startFirstVideo()
-
-      // Stop preview
-      setTimeout(() => {
-        this.$refs.video.pause()
-        this.playing = false
-      }, 1950)
+      this.startVideo()
     },
     toggleVideo() {
       if (!this.isPlayable) return
