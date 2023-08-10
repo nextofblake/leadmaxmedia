@@ -174,7 +174,7 @@ export default {
 /* Profile Image */
 .image-container {
   position: relative;
-  border: 10px double var(--color-gray-1);
+  border: 10px double var(--color-gray-2);
   border-radius: var(--radius-50);
   overflow: hidden;
   width: 300px; /* Set the desired width of the image container */

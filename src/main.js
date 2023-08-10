@@ -7,6 +7,7 @@ import EventService from './services/EventService';
 import NetworkService from './services/NetworkService';
 import ProfileService from './services/ProfileService';
 import VideoService from './services/VideoService';
+import ImageService from './services/ImageService';
 
 /**
  * Create Vue app
@@ -39,9 +40,10 @@ app.use(router)
  * Service Provider
  * - allows singleton global reactivity
  */
+app.provide('devService', DevService)
 app.provide('emailService', EmailService)
 app.provide('eventService', EventService)
-app.provide('devService', DevService)
+app.provide('imageService', ImageService)
 app.provide('networkService', NetworkService)
 app.provide('profileService', ProfileService)
 app.provide('videoService', VideoService)

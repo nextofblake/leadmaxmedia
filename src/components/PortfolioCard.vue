@@ -21,12 +21,17 @@
       </div>
     </div>
     <div class="portfolio-content" :style="contentStyles">
+      <div class="image-container" :style="contentImageStyles" >
+        <img class="styled-image" :src="image" alt="Porfolio Image" />
+      </div>
       <slot></slot>
     </div>
   </div>
 </template>
     
 <script>
+import { inject } from 'vue'
+
 export default {
   name: 'PortfolioCard',
   props: {
@@ -37,6 +42,9 @@ export default {
       type: String
     },
     link: {
+      type: String
+    },
+    image: {
       type: String
     },
     iconName: {
@@ -51,25 +59,39 @@ export default {
   watch: {
     expanded: {
       handler(expanded) {
-        if (expanded) {
-          this.$refs.self.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          })
-        }
+        setTimeout(() => {
+          if (expanded) {
+            this.$refs.self.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            })
+          }
 
-        setTimeout(() => this.afterExpanded = expanded, 300)
+          this.afterExpanded = expanded
+        }, 200)
       }
     }
   },
   computed: {
     contentStyles() {
       return {
-        maxHeight: this.expanded ? '200px' : '0',
+        maxHeight: this.expanded ? '500px' : '0',
         padding: this.expanded ? '0 0 0 10px' : '0',
         opacity: this.expanded ? '1' : '0',
         transition: 'max-height 0.5s ease, opacity 0.2s linear, padding 0.2s linear',
       }
+    },
+    contentImageStyles() {
+      return {
+        height: this.expanded ? '225px' : '0',
+        margin: this.expanded ? '10px 0 10px 0' : '0',
+        transition: 'height 0.5s ease',
+      }
+    }
+  },
+  setup() {
+    return {
+      imageService: inject('imageService')
     }
   },
   data() {
@@ -112,6 +134,7 @@ export default {
 }
 .portfolio-content {
   padding: 0;
+  color: var(--color-black);
 }
 .icon-expander {
   font-size: 14px;
@@ -158,6 +181,23 @@ export default {
 }
 .icon-link > svg {
   height: 15px;
+}
+.image-container {
+  width: 90%; /* Adjust the width as needed */
+  height: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  border: 4px solid var(--color-gray-2);
+}
+.styled-image {
+  object-fit: cover;
+  position: absolute;
+  top: 0; /* Align to the top of the container */
+  left: 0;
+  transform: translateX(0); /* Reset transform */
+  margin-top: 0;
+  width: 100%;
 }
 </style>
     

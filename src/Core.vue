@@ -67,6 +67,7 @@
               description="A lead generation company in fintech"
               link="https://financebuddy.com"
               iconName="paperclip"
+              :image="imageService.financeBuddy"
             >
               <ul>
                 <li>&bull; Detailed reporting for affiliate advertisers</li>
@@ -79,6 +80,7 @@
               description="A habit tracking app"
               link="https://nukshuk.com"
               iconName="paperclip"
+              :image="imageService.nukshuk"
             >
               <ul style="font-size: var(--font-size-xs);">
                 <li>&bull; Total redesign w/ pro UX designer</li>
@@ -91,9 +93,10 @@
               description="Mortgage lead application"
               link="https://snapfi.com"
               iconName="paperclip"
+              :image="imageService.snapfi"
             >
               <ul>
-                <li>&bull; SEO for leads of mortgage application</li>
+                <li>&bull; SEO for mortgage leads</li>
                 <li>&bull; Created api itegration for housing pricing</li>
                 <li>&bull; Visulized data graphs for web users</li>
               </ul>
@@ -103,10 +106,11 @@
               description="Hunting utility app"
               link="https://huntinglocator.com"
               iconName="paperclip"
+              :image="imageService.huntingLocator"
             >
               <ul>
                 <li>&bull; Tools for hunters to track animal sightings</li>
-                <li>&bull; Integrated Google Maps capabilities</li>
+                <li>&bull; Integrated Mapbox capabilities</li>
                 <li>&bull; Refactored codebase for futureproofing</li>
               </ul>
             </PortfolioCard>
@@ -145,9 +149,10 @@ export default {
   },
   setup() {
     return {
+      devService: inject('devService'),
       emailService: inject('emailService'),
       eventService: inject('eventService'),
-      devService: inject('devService'),
+      imageService: inject('imageService'),
       networkService: inject('networkService'),
       profileService: inject('profileService'),
       videoService: inject('videoService'),
@@ -156,7 +161,7 @@ export default {
   data() {
     return {
       heading: '',
-      headingIntro: 'Hello, I am Blake Alan',
+      headingIntro: 'Hello, my name is Blake',
       headingHomepage: 'Welcome to LeadMaxMedia',
       headingAfterVideo: 'Let\'s connect',
       headingSuccessMsg: 'Thanks, check your inbox',
@@ -177,14 +182,18 @@ export default {
     this.networkService.boot()
     this.devService.boot()
 
-    // Load assets
+    // Load blocking assets
     this.profileService.boot()
-    this.videoService.boot()
   },
   methods: {
     onAppLoaded() {
+      // Hello, my name is Blake
       console.log('Core@onAppLoaded')
       this.heading = this.headingIntro
+
+      // Load lazy assets
+      this.videoService.boot()
+      this.imageService.boot()
 
       // DEV MODE: ?dev=1
       if (this.devService.enabled) {
