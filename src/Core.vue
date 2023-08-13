@@ -164,7 +164,6 @@ export default {
       heading: '',
       headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
-      headingIntroReel: 'Greetings, ',
       headingSuccessMsg: 'Thanks, check your inbox',
       headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'I will reply in <48hr',
@@ -187,6 +186,11 @@ export default {
     // Load blocking assets
     this.profileService.boot()
   },
+  computed: {
+    headingIntroReel() {
+      return 'Greetings, ' + this.userName
+    },
+  },
   methods: {
     onAppLoaded() {
       // Hello, my name is Blake
@@ -202,8 +206,9 @@ export default {
         this.userName = 'LxM Mailinator'
         this.userEmail = 'lxm@mailinator.com'
         this.heading = this.headingHomepage
-        this.showProfileCta = false
         this.showHome = true
+        this.showProfileCta = false
+        this.shrinkProfile = true
       }
     },
     onPrinted(heading) {
@@ -241,7 +246,7 @@ export default {
       if (this.$route.path === '/intro') {
         this.showHome = false
         this.showIntroReel = true
-        this.heading = this.headingIntroReel + this.userName
+        this.heading = this.headingIntroReel
       } else {
         this.showHome = true
         this.showIntroReel = false
