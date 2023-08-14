@@ -84,6 +84,7 @@ export default {
   setup() {
     return {
       profileService: inject('profileService'),
+      scrollService: inject('scrollService'),
     }
   },
   data() {
@@ -120,8 +121,7 @@ export default {
     submit() {
       this.$emit('discover', this.name, this.email)
 
-      // Scroll back to top of page
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      this.scrollService.scrollToTop(500)
     },
     runTypewriter(heading = '') {
       interval(50)

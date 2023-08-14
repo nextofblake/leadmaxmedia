@@ -1,10 +1,14 @@
 <!-- 
+    Features:
+    - preloaded video
+    - playsinline (no fullscreen)
+    - blackout on first play (mobile bug fix)
     WARNING: 
     I set the video height directly via --video-card-height in variables.css, 
     this is to make it work for all mobile devices, it is a HACK!
 -->
 <template>
-  <div ref="self" class="card" :class="{'card--playing': playing, 'card--hide-video' : hideVideo}">
+  <div ref="self" class="card" :class="{'card--playing': playing && !hideVideo, 'card--hide-video' : hideVideo}">
     <div class="card-head">
       <video 
         ref="video"
@@ -12,6 +16,7 @@
         :disablepictureinpicture="true"
         :playsinline="true"
         :poster="poster"
+        :preload="'auto'"
         @timeupdate="setControlWidth"
         @progress="onProgress"
         @canplaythrough="onPlayable"
@@ -33,14 +38,6 @@
           >
             <path style="fill: var(--color-gray-3)" d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/>
           </svg>
-          <!-- <svg 
-            v-if="isPlayable && playing"
-            class="card-head--overlay-icon"
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 320 512"
-          >
-            <path style="fill: var(--color-gray-3)" d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/>
-          </svg> -->
         </div>
         <Break height="40px"></Break>
       </div>
@@ -88,14 +85,10 @@ export default {
       hideVideo: false,
       showIcon: false,
       controlWidth: '0%',
-      loopSubscription: null,
     }
   },
   mounted() {
-    if (!this.devService.enabled) {
-      this.$refs.video.load() // Force video load
-      this.$refs.video.muted = true // Force muted video
-    }
+    this.$refs.video.muted = true // Force muted video
     document.addEventListener('click', this.onClickAwayVideo)
   },
   watch: {
@@ -110,9 +103,7 @@ export default {
       if (!this.isPlayable) return
       if (this.$refs.video.buffered.length === 0) return
 
-      // Video is playable
-      // At least 1 second is loaded
-      // Has not been played before
+      // Video is playable, 1 second of buffer, and is first play
       if (this.$refs.video.buffered.end(0) > 0 && !this.hasPlayed) {
         this.startPreview()
       }
@@ -120,6 +111,7 @@ export default {
     onPlayable() {
       // Only allow video if network connection supports it
       this.isPlayable = this.networkService.supportsVideo
+      this.onProgress()
     },
     onEndedVideo() {
       this.stopVideo()
@@ -134,9 +126,8 @@ export default {
     },
     startPreview() {
       if (
-        this.playing ||                  // No preview when playing 
-        !this.showPreview ||             // No preview when unspecified
-        this.loopSubscription !== null   // No preview when previewing
+        this.playing ||     // No preview when playing 
+        !this.showPreview   // No preview when unspecified
       ) return
 
       // Begin preview
@@ -259,7 +250,7 @@ export default {
   align-items: center;
 }
 .card--hide-video .card-head--overlay {
-  background: rgba(0, 0, 0, 1) !important; /** Background black for mobile support */
+  background: rgba(0, 0, 0, 1); /** Background black for mobile support */
 }
 .card--playing .card-head--overlay {
   background: rgba(0, 0, 0, 0); /** Background transparent */

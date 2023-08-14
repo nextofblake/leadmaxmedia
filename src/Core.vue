@@ -156,6 +156,7 @@ export default {
       imageService: inject('imageService'),
       networkService: inject('networkService'),
       profileService: inject('profileService'),
+      scrollService: inject('scrollService'),
       videoService: inject('videoService'),
     }
   },
@@ -166,7 +167,7 @@ export default {
       headingHomepage: 'Welcome to LeadMaxMedia',
       headingSuccessMsg: 'Thanks, check your inbox',
       headingFailureMsg: 'Sorry, try again later',
-      headingFinalMsg: 'I will reply in <48hr',
+      headingFinalMsg: 'All replies in <48hr',
       loadingMeetingEmail: false,
       loadingSalesEmail: false,
       showProfileCta: false,
@@ -223,7 +224,7 @@ export default {
           })
           break
         case this.headingIntroReel:
-          console.log('Do something on intro video')
+          this.scrollService.scrollToBottom(500)
           break
         case this.headingSuccessMsg:
           this.profileService.flipImage().then(() => {
@@ -257,10 +258,11 @@ export default {
       this.showIntroReel = false
       this.showHome = true
       this.heading = this.headingHomepage
+      this.scrollService.scrollToTop(500)
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
-      this.emailService.sendMeeting(this.userName, this.userEmail)
+      this.emailService.sendFaker(this.userName, this.userEmail)
         .then(response => {
           this.heading = this.headingSuccessMsg
           console.log('Core@onDiscover', response)
@@ -270,8 +272,10 @@ export default {
           console.error('Core@onDiscover', error)
         })
         .finally(() => {
+          this.scrollService.scrollToTop(300)
           this.loadingMeetingEmail = false
           this.showHome = false
+          this.shrinkProfile = false
         })
     },
     bookAudit() {
@@ -286,8 +290,10 @@ export default {
           console.error('Core@onDiscover', error)
         })
         .finally(() => {
+          this.scrollService.scrollToTop(300)
           this.loadingSalesEmail = false
           this.showHome = false
+          this.shrinkProfile = false
         })
     },
   },

@@ -74,7 +74,7 @@ export default {
           return
         }
         if (expanded) {
-          this.scrollService.fixScrollToBottom(500)
+          this.scrollService.scrollToBottom(500)
         }
         setTimeout(() => {
           this.afterExpanded = expanded
