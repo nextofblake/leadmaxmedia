@@ -165,7 +165,9 @@ export default {
       heading: '',
       headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
-      headingSuccessMsg: 'Thanks, check your inbox',
+      headingSuccessBooking: 'Okay, let\'s schedule',
+      headingSuccessAudit: 'Tailored analysis in <48hr',
+      headingSuccessAuditEnd: 'Fill out Google Form',
       headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'All replies in <48hr',
       loadingMeetingEmail: false,
@@ -226,9 +228,17 @@ export default {
         case this.headingIntroReel:
           this.scrollService.scrollToBottom(500)
           break
-        case this.headingSuccessMsg:
+        case this.headingSuccessBooking:
           this.profileService.flipImage().then(() => {
-            this.heading = this.headingFinalMsg
+            window.location.href = this.emailService.getMeetingUrl(this.userName, this.userEmail)
+          })
+          break
+        case this.headingSuccessAudit:
+          setTimeout(() => this.heading = this.headingSuccessAuditEnd, 500)
+          break
+        case this.headingSuccessAuditEnd:
+          this.profileService.flipImage().then(() => {
+            window.location.href = this.emailService.googleFormUrl
           })
           break
         case this.headingFailureMsg:
@@ -262,9 +272,9 @@ export default {
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
-      this.emailService.sendMeeting(this.userName, this.userEmail)
+      this.emailService.sendFaker(500)
         .then(response => {
-          this.heading = this.headingSuccessMsg
+          this.heading = this.headingSuccessBooking
           console.log('Core@onDiscover', response)
         })
         .catch(error => {
@@ -280,9 +290,9 @@ export default {
     },
     bookAudit() {
       this.loadingSalesEmail = true
-      this.emailService.sendSales(this.userName, this.userEmail)
+      this.emailService.sendFaker(500)
         .then(response => {
-          this.heading = this.headingSuccessMsg
+          this.heading = this.headingSuccessAudit
           console.log('Core@onDiscover', response)
         })
         .catch(error => {
