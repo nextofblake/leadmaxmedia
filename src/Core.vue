@@ -262,7 +262,7 @@ export default {
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
-      this.emailService.sendFaker(this.userName, this.userEmail)
+      this.emailService.sendMeeting(this.userName, this.userEmail)
         .then(response => {
           this.heading = this.headingSuccessMsg
           console.log('Core@onDiscover', response)
