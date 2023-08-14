@@ -10,13 +10,12 @@ const VideoService = reactive({
   boot() {
     console.log('VideoService@boot')
 
-    const checkup = new Image()
-    checkup.onload = () => (this.loaded = true)
-    checkup.src = this.checkupPoster
-
-    const meeting = new Image()
-    meeting.onload = () => (this.loaded = true)
-    meeting.src = this.meetingPoster
+    this.lazyLoad(this.checkupPoster)
+    this.lazyLoad(this.meetingPoster)
+  },
+  lazyLoad(src) {
+    const image = new Image()
+    image.src = src
   }
 })
 

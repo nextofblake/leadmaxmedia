@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-const NetworkSpeed = require('network-speed');
+// const NetworkSpeed = require('network-speed');
 
 const NetworkService = reactive({
   supportsVideo: false,
@@ -11,11 +11,15 @@ const NetworkService = reactive({
     console.log('NetworkService@boot', 'downloadSpeed', this.downloadSpeed, 'supportsVideo: ', this.supportsVideo)
   },
   async getNetworkDownloadSpeed() {
-    const fileSizeInBytes = 500000;
-    const speed = await (new NetworkSpeed()).checkDownloadSpeed(this.cdnCheckUrl, fileSizeInBytes);
+    // WARNING: turning of network speed check
+    this.supportsVideo = true
 
-    this.downloadSpeed = parseFloat(speed.mbps)
-    this.supportsVideo = this.downloadSpeed >= 5
+    // const fileSizeInBytes = 500000;
+    // const speed = await (new NetworkSpeed()).checkDownloadSpeed(this.cdnCheckUrl, fileSizeInBytes);
+
+    // this.downloadSpeed = parseFloat(speed.mbps)
+
+    // this.supportsVideo = this.downloadSpeed >= 5
   }
 })
 

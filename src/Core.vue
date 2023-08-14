@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" @enter="onAppLoaded">
+  <transition name="fade" @enter="onAppInit">
     <!-- Overlay view masking app when assets are loading -->
     <div v-if="!profileService.loaded" class="view view--white"></div>
 
@@ -16,7 +16,7 @@
       />
 
       <!-- Home Page -->
-      <transition name="rise">
+      <transition name="rise" @before-enter="onHomeInit">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
           <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
@@ -195,14 +195,10 @@ export default {
     },
   },
   methods: {
-    onAppLoaded() {
+    onAppInit() {
       // Hello, my name is Blake
-      console.log('Core@onAppLoaded')
+      console.log('Core@onAppInit')
       this.heading = this.headingIntro
-
-      // Load lazy assets
-      this.videoService.boot()
-      this.imageService.boot()
 
       // DEV MODE: ?dev=1
       if (this.devService.enabled) {
@@ -213,6 +209,15 @@ export default {
         this.showProfileCta = false
         this.shrinkProfile = true
       }
+    },
+    onHomeInit() {
+      // Load lazy assets
+      this.videoService.boot()
+      this.imageService.boot()
+
+      // Reveal welcome heading
+      this.heading = this.headingHomepage
+      this.scrollService.scrollToTop(500)
     },
     onPrinted(heading) {
       switch (heading) {
@@ -260,15 +265,11 @@ export default {
         this.heading = this.headingIntroReel
       } else {
         this.showHome = true
-        this.showIntroReel = false
-        this.heading = this.headingHomepage
       }
     },
     onIntroReelEnd() {
       this.showIntroReel = false
       this.showHome = true
-      this.heading = this.headingHomepage
-      this.scrollService.scrollToTop(500)
     },
     bookMeeting() {
       this.loadingMeetingEmail = true
@@ -344,7 +345,7 @@ export default {
 /* <transition name="fade"> */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.75s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 .fade-enter-from,
 .fade-leave-to {
