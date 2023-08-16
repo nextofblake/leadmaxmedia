@@ -38,10 +38,9 @@
     var(--color-gray-9) 121.15%
   );
   --gradient-primary: linear-gradient(
-    172.5deg, 
-    var(--color-lightgreen) 0%, 
-    var(--color-lightcyan) 75%,
-    var(--color-cornflower) 100%
+    165.5deg,
+    #4cddf2 11.2%,
+    #5c79ff 91.1% 
   );
   --gradient-alt: linear-gradient(
     160deg,
@@ -61,6 +60,16 @@
 @media(max-width: 400px) {
   :root {
     --font-size-lg: 18px;
+  }
+}
+
+/* Desktop width */
+@media(min-width: 1025px) {
+  :root {
+    --font-size-lg: 22px;
+    --font-size-md: 18px;
+    --font-size-sm: 16px;
+    --font-size-xs: 10px;
   }
 }
 
