@@ -19,7 +19,7 @@
         :preload="'auto'"
         @timeupdate="setControlWidth"
         @progress="onProgress"
-        @canplaythrough="onPlayable"
+        @canplay="onPlayable"
         @ended="onEndedVideo"
       >
         <source v-if="networkService.supportsVideo" :src="src" type="video/mp4" />

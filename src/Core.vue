@@ -45,7 +45,7 @@
 
           <div class="section-layout">
             <div class="section">
-              <h1 style="color: var(--color-gray-0)">Services</h1>
+              <h1 style="color: var(--color-offwhite)">Services</h1>
               <Break/>
               <ServiceCard
                 name="Web Development"
@@ -71,7 +71,7 @@
               />
             </div>
             <div class="section">
-              <h1 style="color: var(--color-gray-0)">Portfolio</h1>
+              <h1 style="color: var(--color-offwhite)">Portfolio</h1>
               <Break/>
               <VideoCard :src="videoService.meeting" :poster="videoService.meetingPoster" style="margin-bottom: 10px;">
                 <template #title>Book Zoom Meeting</template>
