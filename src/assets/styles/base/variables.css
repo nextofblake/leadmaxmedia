@@ -19,6 +19,8 @@
   --color-darkblue: rgb(30, 48, 80);
   --color-orangelight: #ebaf19;
   --color-orange: #e65200;
+  --color-green: #50c878;
+  --color-gold: #f2c649;
 
   --font-family-big: 'Oswald', sans-serif;
   --font-family-default: 'Rubik', sans-serif;
@@ -27,7 +29,7 @@
   --font-size-lg: 20px;
   --font-size-md: 16px;
   --font-size-sm: 14px;
-  --font-size-xs: 8px;
+  --font-size-xs: 10px;
 
   --global-viewPadding: 20px;
 
@@ -69,7 +71,7 @@
     --font-size-lg: 22px;
     --font-size-md: 18px;
     --font-size-sm: 16px;
-    --font-size-xs: 10px;
+    --font-size-xs: 12px;
   }
 }
 

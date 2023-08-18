@@ -60,6 +60,33 @@
           </VideoCard>
           <Break height="2vh"/>
           <div style="width: 100%; max-width: 500px;">
+            <h1 style="color: var(--color-gray-0)">Services</h1>
+            <Break/>
+            <ServiceCard
+              name="Web Development"
+              description="Create optimized custom site"
+              :image="imageService.startup"
+              :items="[
+                'Mobile first design to attract 15% more traffic',
+                'Modernize existing website to engage users ',
+                'SEO to boost organic search engine traffic'
+              ]"
+              :premiumItems="[
+                'Backend development with cloud app & databases'
+              ]"
+            />
+            <ServiceCard
+              name="Lead Generation"
+              description="Convert prospects to customers"
+              :image="imageService.magnet"
+              :items="[
+                'Create ad creatives and target your audience',
+                'Grow your social following and generate likes',
+              ]"
+            />
+          </div>
+          <Break height="2vh"/>
+          <div style="width: 100%; max-width: 500px;">
             <h1 style="color: var(--color-gray-0)">Portfolio</h1>
             <Break/>
             <PortfolioCard 
@@ -83,7 +110,7 @@
               iconName="paperclip"
               :image="imageService.nukshuk"
             >
-              <ul style="font-size: var(--font-size-xs);">
+              <ul>
                 <li>&bull; Total redesign w/ pro UX designer</li>
                 <li>&bull; Deployed 24/7 cloud Docker Swarm</li>
                 <li>&bull; Project management of coaching platform</li>
@@ -135,6 +162,7 @@ import Break from './components/Break.vue'
 import ContactsFooter from './components/ContactsFooter.vue'
 import PortfolioCard from './components/PortfolioCard.vue'
 import ProfileContainer from './components/ProfileContainer.vue'
+import ServiceCard from './components/ServiceCard.vue'
 import VideoCard from './components/VideoCard.vue'
 import VideoReel from './components/VideoReel.vue'
 
@@ -145,6 +173,7 @@ export default {
     ContactsFooter,
     PortfolioCard,
     ProfileContainer,
+    ServiceCard,
     VideoCard,
     VideoReel,
   },

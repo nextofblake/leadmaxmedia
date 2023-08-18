@@ -24,6 +24,7 @@
       <div class="image-container" :style="contentImageStyles" >
         <img class="styled-image" :src="image" alt="Porfolio Image" />
       </div>
+      <div class="expander--line"></div>
       <slot></slot>
     </div>
   </div>
@@ -150,6 +151,15 @@ export default {
 .portfolio-content {
   padding: 0;
   color: var(--color-black);
+}
+.expander--line {
+  position: absolute;
+  right: 22px;
+  top: 0;
+  height: calc(100% - 80px);
+  width: 2px;
+  background: var(--color-gray-2);
+  margin: 40px 0;
 }
 .icon-expander {
   font-size: 14px;
