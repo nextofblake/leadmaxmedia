@@ -57,14 +57,14 @@
 }
 
 /* Mobile width */
-@media(max-width: 400px) {
+@media(max-width: 500px) {
   :root {
     --font-size-lg: 18px;
   }
 }
 
 /* Desktop width */
-@media(min-width: 1025px) {
+@media(min-width: 800px) {
   :root {
     --font-size-lg: 22px;
     --font-size-md: 18px;

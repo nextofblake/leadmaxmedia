@@ -19,7 +19,7 @@
       <transition name="rise" @before-enter="onHomeInit">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <div style="width: 100%; max-width: min(800px, calc(100vw - 20px))">
+          <div style="width: 100%; max-width: min(800px, calc(100vw - 40px))">
             <VideoCard :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview">
               <template #title>Are You Mobile First?</template>
               <template #footer>
@@ -198,7 +198,7 @@ export default {
       headingIntro: 'Hello, I am Blake Alan',
       headingHomepage: 'Welcome to LeadMaxMedia',
       headingSuccessBooking: 'Okay, let\'s schedule',
-      headingSuccessAudit: 'Tailored analysis in <48hr',
+      headingSuccessAudit: 'Tailored analysis in 48hr',
       headingSuccessAuditEnd: 'Fill out Google Form',
       headingFailureMsg: 'Sorry, try again later',
       headingFinalMsg: 'All replies in <48hr',
