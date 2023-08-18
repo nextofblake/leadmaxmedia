@@ -19,129 +19,132 @@
       <transition name="rise" @before-enter="onHomeInit">
         <div v-if="showHome" class="home-page">
           <Break height="2vh"/>
-          <VideoCard  :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview" style="max-width: 500px;">
-            <template #title>Are You Mobile First?</template>
-            <template #footer>
-              <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
-              <Break height="10px"/>
-              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <ul>
-                  <li>❤️‍🩹 Mobile health</li>
-                  <li>🕸️ Web reputation</li>
-                </ul>
-                <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
-                  <span v-if="!loadingSalesEmail">Free</span>
-                  <span v-if="loadingSalesEmail">
-                    <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-                  </span>
-                </button>
-              </div>
-            </template>
-          </VideoCard>
-          <Break height="2vh"/>
-          <VideoCard  :src="videoService.meeting" :poster="videoService.meetingPoster" style="max-width: 500px;">
-            <template #title>Book Zoom Meeting</template>
-            <template #footer>
-              <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
-              <Break height="10px"/>
-              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <ul>
-                  <li>🕒️ 1-1 meeting</li>
-                  <li>💸 Pricing models</li>
-                </ul>
-                <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
-                  <span v-if="!loadingMeetingEmail">Book</span>
-                  <span v-if="loadingMeetingEmail">
-                    <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-                  </span>
-                </button>
-              </div>
-            </template>
-          </VideoCard>
-          <Break height="2vh"/>
-          <div style="width: 100%; max-width: 500px;">
-            <h1 style="color: var(--color-gray-0)">Services</h1>
-            <Break/>
-            <ServiceCard
-              name="Web Development"
-              description="Create optimized custom site"
-              :image="imageService.startup"
-              :items="[
-                'Mobile first design to attract 15% more traffic',
-                'Modernize existing website to engage users ',
-                'SEO to boost organic search engine traffic'
-              ]"
-              :premiumItems="[
-                'Backend development with cloud app & databases'
-              ]"
-            />
-            <ServiceCard
-              name="Lead Generation"
-              description="Convert prospects to customers"
-              :image="imageService.magnet"
-              :items="[
-                'Create ad creatives and target your audience',
-                'Grow your social following and generate likes',
-              ]"
-            />
+          <div style="width: 100%; max-width: min(800px, calc(100vw - 20px))">
+            <VideoCard :src="videoService.checkup" :poster="videoService.checkupPoster" :showPreview="showVideoPreview">
+              <template #title>Are You Mobile First?</template>
+              <template #footer>
+                <span style="font-size: var(--font-size-lg);">Brand Checkup</span>
+                <Break height="10px"/>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                  <ul>
+                    <li>❤️‍🩹 Mobile health</li>
+                    <li>🕸️ Web reputation</li>
+                  </ul>
+                  <button class="button--unblended button--blue" style="width: 140px" @click="bookAudit()">
+                    <span v-if="!loadingSalesEmail">Free</span>
+                    <span v-if="loadingSalesEmail">
+                      <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+                    </span>
+                  </button>
+                </div>
+              </template>
+            </VideoCard>
           </div>
+          
           <Break height="2vh"/>
-          <div style="width: 100%; max-width: 500px;">
-            <h1 style="color: var(--color-gray-0)">Portfolio</h1>
-            <Break/>
-            <PortfolioCard 
-              name="TLG"
-              description="A lead generation company in fintech"
-              link="https://financebuddy.com"
-              iconName="paperclip"
-              :image="imageService.financeBuddy"
-              :startExpanded="true"
-            >
-              <ul>
-                <li>&bull; Detailed reporting for affiliate advertisers</li>
-                <li>&bull; Worked in large team, hitting deliverables</li>
-                <li>&bull; Analyzed A/B tests for thousands of users</li>
-              </ul>
-            </PortfolioCard>
-            <PortfolioCard
-              name="Nukshuk"
-              description="A habit tracking app"
-              link="https://nukshuk.com"
-              iconName="paperclip"
-              :image="imageService.nukshuk"
-            >
-              <ul>
-                <li>&bull; Total redesign w/ pro UX designer</li>
-                <li>&bull; Deployed 24/7 cloud Docker Swarm</li>
-                <li>&bull; Project management of coaching platform</li>
-              </ul>
-            </PortfolioCard>
-            <PortfolioCard 
-              name="Snapfi"
-              description="Mortgage lead application"
-              link="https://snapfi.com"
-              iconName="paperclip"
-              :image="imageService.snapfi"
-            >
-              <ul>
-                <li>&bull; SEO for mortgage leads</li>
-                <li>&bull; Created api itegration for housing pricing</li>
-                <li>&bull; Visulized data graphs for web users</li>
-              </ul>
-            </PortfolioCard>
-            <PortfolioCard 
-              name="Hunting Locator"
-              description="Hunting utility app"
-              link="https://huntinglocator.com"
-              iconName="paperclip"
-              :image="imageService.huntingLocator"
-            >
-              <ul>
-                <li>&bull; Tools for hunters to track animal sightings</li>
-                <li>&bull; Integrated Mapbox capabilities</li>
-                <li>&bull; Refactored codebase for futureproofing</li>
-              </ul>
-            </PortfolioCard>
+
+          <div class="section-layout">
+            <div class="section">
+              <h1 style="color: var(--color-gray-0)">Services</h1>
+              <Break/>
+              <ServiceCard
+                name="Web Development"
+                description="Create optimized custom site"
+                :image="imageService.startup"
+                :items="[
+                  'Mobile first design to attract 15% more traffic',
+                  'Modernize existing website to engage users ',
+                  'SEO to boost organic search engine traffic'
+                ]"
+                :premiumItems="[
+                  'Backend development for cloud app with database'
+                ]"
+              />
+              <ServiceCard
+                name="Lead Generation"
+                description="Convert prospects to customers"
+                :image="imageService.magnet"
+                :items="[
+                  'Create ad creatives and target your audience',
+                  'Grow your social following and generate likes',
+                ]"
+              />
+            </div>
+            <div class="section">
+              <h1 style="color: var(--color-gray-0)">Portfolio</h1>
+              <Break/>
+              <VideoCard :src="videoService.meeting" :poster="videoService.meetingPoster" style="margin-bottom: 10px;">
+                <template #title>Book Zoom Meeting</template>
+                <template #footer>
+                  <span style="font-size: var(--font-size-lg);">15 Minute Chat</span>
+                  <Break height="10px"/>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <ul>
+                      <li>🕒️ 1-1 meeting</li>
+                      <li>💸 Pricing models</li>
+                    </ul>
+                    <button class="button--unblended" style="width: 140px" @click="bookMeeting()">
+                      <span v-if="!loadingMeetingEmail">Book</span>
+                      <span v-if="loadingMeetingEmail">
+                        <svg class="spin--fast" xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
+                      </span>
+                    </button>
+                  </div>
+                </template>
+              </VideoCard>
+              <PortfolioCard 
+                name="TLG"
+                description="A lead generation company in fintech"
+                link="https://financebuddy.com"
+                iconName="paperclip"
+                :image="imageService.financeBuddy"
+              >
+                <ul>
+                  <li>&bull; Detailed reporting for affiliate advertisers</li>
+                  <li>&bull; Worked in large team, hitting deliverables</li>
+                  <li>&bull; Analyzed A/B tests for thousands of users</li>
+                </ul>
+              </PortfolioCard>
+              <PortfolioCard
+                name="Nukshuk"
+                description="A habit tracking app"
+                link="https://nukshuk.com"
+                iconName="paperclip"
+                :image="imageService.nukshuk"
+              >
+                <ul>
+                  <li>&bull; Total redesign w/ pro UX designer</li>
+                  <li>&bull; Deployed 24/7 cloud Docker Swarm</li>
+                  <li>&bull; Project management of coaching platform</li>
+                </ul>
+              </PortfolioCard>
+              <PortfolioCard 
+                name="Snapfi"
+                description="Mortgage lead application"
+                link="https://snapfi.com"
+                iconName="paperclip"
+                :image="imageService.snapfi"
+              >
+                <ul>
+                  <li>&bull; SEO for mortgage leads</li>
+                  <li>&bull; Created api itegration for housing pricing</li>
+                  <li>&bull; Visulized data graphs for web users</li>
+                </ul>
+              </PortfolioCard>
+              <PortfolioCard 
+                name="Hunting Locator"
+                description="Hunting utility app"
+                link="https://huntinglocator.com"
+                iconName="paperclip"
+                :image="imageService.huntingLocator"
+              >
+                <ul>
+                  <li>&bull; Tools for hunters to track animal sightings</li>
+                  <li>&bull; Integrated Mapbox capabilities</li>
+                  <li>&bull; Refactored codebase for futureproofing</li>
+                </ul>
+              </PortfolioCard>
+            </div>
           </div>
           <Break height="2vh"/>
           <ContactsFooter id="footer"/>
@@ -353,12 +356,21 @@ export default {
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-content: flex-start;
+  flex-direction: column;
+  align-items: center;
 }
 .home-page > * {
   margin: 0 20px 0 20px; /* Force page horizontal padding */
+}
+.section-layout {
+  display: flex; 
+  flex-wrap: wrap; 
+  width: 100%; 
+  max-width: 1200px;
+}
+.section {
+  flex: 1;
+  margin: 2vh;
 }
 
 /* <transition name="rise"> */

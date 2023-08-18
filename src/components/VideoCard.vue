@@ -216,7 +216,6 @@ export default {
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .card-head video {
-  height: var(--video-card-height); /* WARNING: randomly set to work for iPhone SE */
   object-fit: cover;
   width: 100%;
 }

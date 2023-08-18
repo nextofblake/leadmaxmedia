@@ -151,6 +151,7 @@ export default {
 .portfolio-content {
   padding: 0;
   color: var(--color-black);
+  overflow: hidden;
 }
 .expander--line {
   position: absolute;

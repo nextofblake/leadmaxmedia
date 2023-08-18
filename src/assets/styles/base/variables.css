@@ -54,8 +54,6 @@
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-50: 50%;
-
-  --video-card-height: 200px; 
 }
 
 /* Mobile width */
@@ -72,12 +70,5 @@
     --font-size-md: 18px;
     --font-size-sm: 16px;
     --font-size-xs: 12px;
-  }
-}
-
-/* Mobile height */
-@media(max-height: 680px) {
-  :root {
-    --video-card-height: 135px;
   }
 }
