@@ -139,6 +139,7 @@ export default {
 .portfolio-head {
   justify-content: space-between;
   display: flex;
+  user-select: none;
 }
 .name {
   font-size: 16px;
